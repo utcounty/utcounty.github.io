@@ -1,0 +1,13 @@
+[
+  {
+    "listing": "/blocks.html",
+    "items": []
+  },
+  {
+    "listing": "/blog.html",
+    "items": [
+      "/blog/welcome.html",
+      "/blog/metric.html"
+    ]
+  }
+]

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>AJ Averett</title>
+<link>https://ajaverett.com/blog.html</link>
+<atom:link href="https://ajaverett.com/blog.xml" rel="self" type="application/rss+xml"/>
+<description>Senior Consultant at Booz Allen &amp; Adjunct Faculty at MTECH</description>
+<generator>quarto-1.6.40</generator>
+<lastBuildDate>Wed, 04 Feb 2026 07:00:00 GMT</lastBuildDate>
+<item>
+  <title>Welcome: What This Blog Is For</title>
+  <link>https://ajaverett.com/blog/welcome.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>This is a lightweight place to share <strong>Utah County–specific</strong> political data and practical strategy.</p>
+<ul>
+<li>Keep posts short</li>
+<li>Link sources when you can</li>
+<li>End with one clear takeaway</li>
+</ul>
+
+
+
+ ]]></description>
+  <category>cloud</category>
+  <category>updates</category>
+  <guid>https://ajaverett.com/blog/welcome.html</guid>
+  <pubDate>Wed, 04 Feb 2026 07:00:00 GMT</pubDate>
+  <media:content url="https://ajaverett.com/blog/images/DONKEYYYY.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Quick Metric: Contact → Show Rate</title>
+  <link>https://ajaverett.com/blog/metric.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>A simple weekly check: <strong>how many scheduled voters actually show up</strong> (events, canvass shifts, trainings).</p>
+<p>If the show rate drops, try: - confirm the day before - send a map + time estimate - offer a buddy option (bring a friend)</p>
+
+
+
+ ]]></description>
+  <category>cloud</category>
+  <category>field</category>
+  <category>data</category>
+  <guid>https://ajaverett.com/blog/metric.html</guid>
+  <pubDate>Tue, 03 Feb 2026 07:00:00 GMT</pubDate>
+  <media:content url="https://ajaverett.com/blog/images/mylittledonkey.png" medium="image" type="image/png" height="165" width="144"/>
+</item>
+</channel>
+</rss>

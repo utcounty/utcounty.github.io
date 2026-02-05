@@ -1,0 +1,53 @@
+---
+title: "Data for Progress Blog"
+format:
+  html:
+    minimal: true
+    page-layout: full
+    toc: false
+    css: 
+      - styles/styles.css
+      - styles/listing_styles.css
+    include-in-header:
+      - html_chunks/scripts/tailwind_head.html
+      - html_chunks/scripts/header_bug_fix.html
+    include-before-body:
+      - html_chunks/menu.html
+    include-after-body:
+      - html_chunks/scripts/menu_script.html
+      - html_chunks/scripts/index_script.html
+
+listing:
+  id: guide-listing
+  contents: blog
+  sort: "date desc"
+  type: grid
+  categories: cloud
+  feed: true
+  sort-ui: true
+  filter-ui: true
+  image-placeholder: images/coffee.png
+---
+
+::: {.column-screen}
+
+```{=html}
+<section class="bg-brand-50">
+  <div class="mx-auto max-w-5xl px-4 py-10">
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Data for Progress Blog</h1>
+    <p class="mt-2 max-w-2xl text-base text-slate-700">
+      Updates, notes, and lightweight write-ups. Use the filters to find what you need.
+    </p>
+  </div>
+</section>
+
+<section class="mx-auto max-w-5xl px-4 py-10">
+  <!-- Listing will render inside this div -->
+  <div id="guide-listing"></div>
+</section>
+
+
+{{< include html_chunks/footer.html >}}
+```
+
+:::

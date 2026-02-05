@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data for Progress Blog – AJ Averett</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<link href="./images/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-guide-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-guide-listing'] = new List('listing-guide-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+
+<script>
+
+  tailwind.config = {
+
+    theme: {
+
+      extend: {
+
+        colors: {
+
+          brand: {
+
+            50: "#f2f9ff",
+
+            100: "#e6f3ff",
+
+            200: "#cfe8ff",
+
+            300: "#a7d4ff",
+
+            400: "#73b8ff",
+
+            500: "#3d9bff",
+
+            600: "#1f7fe8",
+
+            700: "#1a66b8",
+
+            800: "#194f8a",
+
+            900: "#173f6a",
+
+          },
+
+        },
+
+      },
+
+    },
+
+  };
+
+</script>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    document.body.classList.add("min-h-screen", "bg-white", "text-slate-900");
+
+  });
+
+</script>
+
+<style>
+
+  #title-block-header {
+
+    display: none !important;
+
+  }
+
+
+
+  /* If Quarto toggles the "no matching items" element on/off,
+
+     just hide it permanently. */
+
+  .listing-no-matching,
+
+  .listing-no-matching.d-none {
+
+    display: none !important;
+
+  }
+
+</style>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    // Your hero title/subtitle injector
+
+    const settings = document.getElementById("hero-settings");
+
+
+
+    if (settings) {
+
+      const titleText = settings.getAttribute("data-title");
+
+      const subtitleText = settings.getAttribute("data-subtitle");
+
+
+
+      const titleEl = document.getElementById("hero-title");
+
+      const subtitleEl = document.getElementById("hero-subtitle");
+
+
+
+      if (titleEl && titleText) titleEl.innerText = titleText;
+
+      if (subtitleEl && subtitleText) subtitleEl.innerText = subtitleText;
+
+
+
+      settings.remove();
+
+    }
+
+
+
+    // Remove "No matching items" block if it exists
+
+    const noMatching = document.querySelector(".listing-no-matching");
+
+    if (noMatching) noMatching.remove();
+
+  });
+
+</script>
+
+
+
+<link rel="stylesheet" href="styles/styles.css">
+<link rel="stylesheet" href="styles/listing_styles.css">
+<link rel="alternate" type="application/rss+xml" title="AJ Averett" href="blog.xml" data-external="1"><meta property="og:title" content="Data for Progress Blog – AJ Averett">
+<meta property="og:site_name" content="AJ Averett">
+<meta name="twitter:title" content="Data for Progress Blog – AJ Averett">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+
+<header class="border-b border-slate-200 bg-white">
+
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+
+    <a href="./index.html" class="flex items-center gap-3">
+
+      <div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-800">
+
+        <svg width="18" height="18" viewbox="0 0 24 24" fill="none" aria-hidden="true">
+
+          <path d="M5 12c3.2-4.6 10.8-4.6 14 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+
+          <path d="M7.5 15c2.1-3 6.9-3 9 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+
+          <circle cx="12" cy="17.5" r="1.3" fill="currentColor"></circle>
+
+        </svg>
+
+      </div>
+
+
+
+      <div class="leading-tight">
+
+        <div class="text-sm font-semibold">Utah County Democrats</div>
+
+        <div class="text-xs text-slate-500">Data + Strategy Sharing</div>
+
+      </div>
+
+    </a>
+
+
+
+    <nav class="hidden items-center gap-6 text-sm sm:flex">
+
+      <a href="./blog.html" class="text-slate-700 hover:text-slate-900">Blog</a>
+
+      <a href="#tools" class="text-slate-700 hover:text-slate-900">Tools</a>
+
+      <a href="#about" class="text-slate-700 hover:text-slate-900">About</a>
+
+    </nav>
+
+
+
+    <div class="flex items-center gap-2">
+
+      <a href="./blog.html" class="hidden rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 sm:inline-flex">
+
+        Read the blog
+
+      </a>
+
+
+
+      <button id="menuBtn" class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 sm:hidden" type="button" aria-label="Open menu" aria-expanded="false">
+
+        <svg width="20" height="20" viewbox="0 0 24 24" fill="none">
+
+          <path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+
+        </svg>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Mobile menu -->
+
+  <div id="mobileNav" class="hidden border-t border-slate-200 bg-white sm:hidden">
+
+    <div class="mx-auto max-w-5xl px-4 py-3">
+
+      <div class="flex flex-col gap-2 text-sm">
+
+        <a href="./blog.html" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">Blog</a>
+
+        <a href="#tools" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">Tools</a>
+
+        <a href="#about" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">About</a>
+
+
+
+        <a href="./blog.html" class="mt-1 inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+
+          Read the blog
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<header id="title-block-header">
+<h1 class="title">Data for Progress Blog</h1>
+
+</header>
+
+
+<div class="column-screen">
+<section class="bg-brand-50">
+  <div class="mx-auto max-w-5xl px-4 py-10">
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Data for Progress Blog</h1>
+    <p class="mt-2 max-w-2xl text-base text-slate-700">
+      Updates, notes, and lightweight write-ups. Use the filters to find what you need.
+    </p>
+  </div>
+</section>
+
+<section class="mx-auto max-w-5xl px-4 py-10">
+  <!-- Listing will render inside this div -->
+  <div id="listing-guide-listing" class="quarto-listing quarto-listing-container-grid">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-guide-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-guide-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
+</div>
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="Y2xvdWQlMkN1cGRhdGVz" data-listing-date-sort="1770188400000" data-listing-file-modified-sort="1770264078972" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="27">
+<a href="./blog/welcome.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./blog/images/DONKEYYYY.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Welcome: What This Blog Is For
+</h5>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Y2xvdWQ='); return false;">
+cloud
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('dXBkYXRlcw=='); return false;">
+updates
+</div>
+</div>
+<div class="card-text listing-description">
+This is a lightweight place to share <strong>Utah County–specific</strong> political data and practical strategy.
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+
+</div>
+<div class="listing-date">
+Feb 4, 2026
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="Y2xvdWQlMkNmaWVsZCUyQ2RhdGE=" data-listing-date-sort="1770102000000" data-listing-file-modified-sort="1770264083573" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="37">
+<a href="./blog/metric.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img loading="lazy" src="./blog/images/mylittledonkey.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Quick Metric: Contact → Show Rate
+</h5>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('Y2xvdWQ='); return false;">
+cloud
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('ZmllbGQ='); return false;">
+field
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YQ=='); return false;">
+data
+</div>
+</div>
+<div class="card-text listing-description">
+A simple weekly check: <strong>how many scheduled voters actually show up</strong> (events, canvass shifts, trainings).
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+
+</div>
+<div class="listing-date">
+Feb 3, 2026
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div>
+</section>
+
+
+<footer class="border-t border-slate-200">
+  <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>© <span id="year"></span> Utah County Democrats</div>
+
+      <div class="flex gap-4">
+        <a href="./blog.html" class="hover:text-slate-900">Blog</a>
+        <a href="#tools" class="hover:text-slate-900">Tools</a>
+        <a href="#about" class="hover:text-slate-900">About</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+
+
+<script>
+
+  (function () {
+
+    const btn = document.getElementById("menuBtn");
+
+    const panel = document.getElementById("mobileNav");
+
+    if (!btn || !panel) return;
+
+
+
+    btn.addEventListener("click", () => {
+
+      const isOpen = !panel.classList.contains("hidden");
+
+      panel.classList.toggle("hidden");
+
+      btn.setAttribute("aria-expanded", String(!isOpen));
+
+    });
+
+
+
+    // Optional: close menu after clicking a link
+
+    panel.querySelectorAll("a").forEach((a) => {
+
+      a.addEventListener("click", () => {
+
+        panel.classList.add("hidden");
+
+        btn.setAttribute("aria-expanded", "false");
+
+      });
+
+    });
+
+  })();
+
+</script>
+
+<script>
+
+  (function () {
+
+    const yearEl = document.getElementById("year");
+
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  })();
+
+</script>
+
+
+
+
+
+</body></html>

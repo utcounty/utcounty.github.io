@@ -1,0 +1,28 @@
+project:
+  resources: ["images"]
+  type: website
+  output-dir: docs
+  preview:
+    port: 0666
+
+
+website:
+  title: "AJ Averett"
+  favicon: images\favicon.png
+  description: "Senior Consultant at Booz Allen & Adjunct Faculty at MTECH"
+  site-url: "https://ajaverett.com" 
+  open-graph: true
+  twitter-card: true
+
+  # navbar:
+  #   background: "#0f172a"
+  #   foreground: light
+  #   pinned: true
+  #   collapse: true
+
+format:
+  html:
+    theme: cosmo
+    # css: styles.css
+
+

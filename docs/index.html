@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Utah County Data for Progress – AJ Averett</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<link href="./images/favicon.png" rel="icon" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+
+<script>
+
+  tailwind.config = {
+
+    theme: {
+
+      extend: {
+
+        colors: {
+
+          brand: {
+
+            50: "#f2f9ff",
+
+            100: "#e6f3ff",
+
+            200: "#cfe8ff",
+
+            300: "#a7d4ff",
+
+            400: "#73b8ff",
+
+            500: "#3d9bff",
+
+            600: "#1f7fe8",
+
+            700: "#1a66b8",
+
+            800: "#194f8a",
+
+            900: "#173f6a",
+
+          },
+
+        },
+
+      },
+
+    },
+
+  };
+
+</script>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    document.body.classList.add("min-h-screen", "bg-white", "text-slate-900");
+
+  });
+
+</script>
+
+
+
+<link rel="stylesheet" href="styles/styles.css">
+<meta property="og:title" content="Utah County Data for Progress – AJ Averett">
+<meta property="og:site_name" content="AJ Averett">
+<meta name="twitter:title" content="Utah County Data for Progress – AJ Averett">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+
+<header class="border-b border-slate-200 bg-white">
+
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
+
+    <a href="./index.html" class="flex items-center gap-3">
+
+      <div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-800">
+
+        <svg width="18" height="18" viewbox="0 0 24 24" fill="none" aria-hidden="true">
+
+          <path d="M5 12c3.2-4.6 10.8-4.6 14 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+
+          <path d="M7.5 15c2.1-3 6.9-3 9 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+
+          <circle cx="12" cy="17.5" r="1.3" fill="currentColor"></circle>
+
+        </svg>
+
+      </div>
+
+
+
+      <div class="leading-tight">
+
+        <div class="text-sm font-semibold">Utah County Democrats</div>
+
+        <div class="text-xs text-slate-500">Data + Strategy Sharing</div>
+
+      </div>
+
+    </a>
+
+
+
+    <nav class="hidden items-center gap-6 text-sm sm:flex">
+
+      <a href="./blog.html" class="text-slate-700 hover:text-slate-900">Blog</a>
+
+      <a href="#tools" class="text-slate-700 hover:text-slate-900">Tools</a>
+
+      <a href="#about" class="text-slate-700 hover:text-slate-900">About</a>
+
+    </nav>
+
+
+
+    <div class="flex items-center gap-2">
+
+      <a href="./blog.html" class="hidden rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 sm:inline-flex">
+
+        Read the blog
+
+      </a>
+
+
+
+      <button id="menuBtn" class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 sm:hidden" type="button" aria-label="Open menu" aria-expanded="false">
+
+        <svg width="20" height="20" viewbox="0 0 24 24" fill="none">
+
+          <path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+
+        </svg>
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Mobile menu -->
+
+  <div id="mobileNav" class="hidden border-t border-slate-200 bg-white sm:hidden">
+
+    <div class="mx-auto max-w-5xl px-4 py-3">
+
+      <div class="flex flex-col gap-2 text-sm">
+
+        <a href="./blog.html" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">Blog</a>
+
+        <a href="#tools" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">Tools</a>
+
+        <a href="#about" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">About</a>
+
+
+
+        <a href="./blog.html" class="mt-1 inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+
+          Read the blog
+
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<header id="title-block-header">
+
+
+</header>
+
+
+<div class="column-screen">
+<main><header id="title-block-header" class="quarto-title-block"><h1 class="title">Utah County Data for Progress</h1></header>
+<section class="bg-brand-50">
+  <div class="mx-auto max-w-5xl px-4 py-12">
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
+      Utah County Data for Progress
+    </h1>
+
+    <p class="mt-3 max-w-2xl text-base text-slate-700">
+      A simple home for shared insights and practical links for organizing, messaging, and turnout.
+    </p>
+
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <a href="./blog.html" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700">
+        Go to the blog
+      </a>
+
+      <a href="#tools" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50">
+        View tools
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="tools" class="mx-auto max-w-5xl px-4 py-10">
+  <h2 class="text-xl font-semibold">Tools</h2>
+  <p class="mt-1 text-sm text-slate-700">
+    Replace these with your real dashboards, docs, or calculators.
+  </p>
+
+  <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <a href="#" class="rounded-lg border border-slate-200 bg-white p-5 hover:border-brand-300 hover:bg-brand-50">
+      <div class="text-sm font-semibold">Voter contact targets</div>
+      <p class="mt-1 text-sm text-slate-700">Link to a calculator or spreadsheet.</p>
+    </a>
+
+    <a href="#" class="rounded-lg border border-slate-200 bg-white p-5 hover:border-brand-300 hover:bg-brand-50">
+      <div class="text-sm font-semibold">Precinct notes template</div>
+      <p class="mt-1 text-sm text-slate-700">A consistent format for local updates.</p>
+    </a>
+
+    <a href="#" class="rounded-lg border border-slate-200 bg-white p-5 hover:border-brand-300 hover:bg-brand-50">
+      <div class="text-sm font-semibold">Shared dashboards</div>
+      <p class="mt-1 text-sm text-slate-700">Trusted charts and reports in one place.</p>
+    </a>
+  </div>
+</section>
+
+<section id="about" class="border-t border-slate-200">
+  <div class="mx-auto max-w-5xl px-4 py-10">
+    <h2 class="text-xl font-semibold">About</h2>
+
+    <p class="mt-2 max-w-2xl text-sm text-slate-700">
+      Keep this short: who it’s for, what belongs here, and how folks should contribute.
+    </p>
+
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+      <a href="mailto:you@example.com" class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700">
+        Contact
+      </a>
+
+      <a href="./blog.html" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50">
+        Read the blog
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-slate-200">
+  <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>© <span id="year"></span> Utah County Democrats</div>
+
+      <div class="flex gap-4">
+        <a href="./blog.html" class="hover:text-slate-900">Blog</a>
+        <a href="#tools" class="hover:text-slate-900">Tools</a>
+        <a href="#about" class="hover:text-slate-900">About</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+</div>
+
+<script>
+
+  (function () {
+
+    const btn = document.getElementById("menuBtn");
+
+    const panel = document.getElementById("mobileNav");
+
+    if (!btn || !panel) return;
+
+
+
+    btn.addEventListener("click", () => {
+
+      const isOpen = !panel.classList.contains("hidden");
+
+      panel.classList.toggle("hidden");
+
+      btn.setAttribute("aria-expanded", String(!isOpen));
+
+    });
+
+
+
+    // Optional: close menu after clicking a link
+
+    panel.querySelectorAll("a").forEach((a) => {
+
+      a.addEventListener("click", () => {
+
+        panel.classList.add("hidden");
+
+        btn.setAttribute("aria-expanded", "false");
+
+      });
+
+    });
+
+  })();
+
+</script>
+
+<script>
+
+  (function () {
+
+    const yearEl = document.getElementById("year");
+
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  })();
+
+</script>
+
+<style>
+
+#title-block-header {
+
+        display: none !important;
+
+    }
+
+</style>
+
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    const settings = document.getElementById('hero-settings');
+
+    
+
+    if (settings) {
+
+        const titleText = settings.getAttribute('data-title');
+
+        const subtitleText = settings.getAttribute('data-subtitle');
+
+        
+
+        const titleEl = document.getElementById('hero-title');
+
+        const subtitleEl = document.getElementById('hero-subtitle');
+
+        
+
+        if (titleEl && titleText) titleEl.innerText = titleText;
+
+        if (subtitleEl && subtitleText) subtitleEl.innerText = subtitleText;
+
+        
+
+        settings.remove();
+
+    }
+
+});
+
+</script>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,21 @@
+<script>
+  (function () {
+    const btn = document.getElementById("menuBtn");
+    const panel = document.getElementById("mobileNav");
+    if (!btn || !panel) return;
+
+    btn.addEventListener("click", () => {
+      const isOpen = !panel.classList.contains("hidden");
+      panel.classList.toggle("hidden");
+      btn.setAttribute("aria-expanded", String(!isOpen));
+    });
+
+    // Optional: close menu after clicking a link
+    panel.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        panel.classList.add("hidden");
+        btn.setAttribute("aria-expanded", "false");
+      });
+    });
+  })();
+</script>

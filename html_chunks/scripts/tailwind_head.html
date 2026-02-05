@@ -1,0 +1,30 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50: "#f2f9ff",
+            100: "#e6f3ff",
+            200: "#cfe8ff",
+            300: "#a7d4ff",
+            400: "#73b8ff",
+            500: "#3d9bff",
+            600: "#1f7fe8",
+            700: "#1a66b8",
+            800: "#194f8a",
+            900: "#173f6a",
+          },
+        },
+      },
+    },
+  };
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("min-h-screen", "bg-white", "text-slate-900");
+  });
+</script>

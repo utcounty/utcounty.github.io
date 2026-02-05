@@ -1,0 +1,194 @@
+/* --- Layout: true whitespace between tiles --- */
+.quarto-listing-container-grid,
+.quarto-listing-container-grid .quarto-grid,
+.quarto-listing-container-grid .grid {
+  gap: 2.25rem !important; /* more space between tiles */
+}
+
+/* Force grid columns to feel like a news page */
+.quarto-listing-container-grid .quarto-grid,
+.quarto-listing-container-grid .grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+
+@media (min-width: 720px) {
+  .quarto-listing-container-grid .quarto-grid,
+  .quarto-listing-container-grid .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .quarto-listing-container-grid .quarto-grid,
+  .quarto-listing-container-grid .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* --- Show ONLY: image + tags + title --- */
+.card-text,
+.card-attribution,
+.card-footer,
+.quarto-grid-item .listing-date,
+.quarto-grid-item .listing-author,
+.quarto-grid-item .listing-description {
+  display: none !important;
+}
+
+/* --- Card: clean, “news” look (no bubbly pills/shadows) --- */
+.quarto-grid-link,
+.quarto-grid-link:hover,
+.quarto-grid-link:focus {
+  text-decoration: none !important;
+}
+
+.quarto-grid-item.card {
+  background: #ffffff !important;
+  border: 1px solid rgba(15, 23, 42, 0.10) !important;
+  border-radius: 0 !important;             /* Vox feels square */
+  box-shadow: none !important;
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.quarto-grid-link:hover .quarto-grid-item.card {
+  transform: translateY(-2px);
+  border-color: rgba(31, 127, 232, 0.28) !important;
+}
+
+/* --- Image: bring it back + make it Vox-like --- */
+p.card-img-top,
+.card-img-top {
+  display: block !important;               /* overrides your earlier hide */
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  height: 12rem;                           /* Vox-ish crop */
+  overflow: hidden;
+  background: #f2f9ff;                     /* brand-50 */
+}
+
+.card-img-top img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1);
+  transition: transform 0.6s ease;
+  display: block;
+}
+
+.quarto-grid-link:hover .card-img-top img {
+  transform: scale(1.03);
+}
+
+/* --- Body spacing: airy but compact --- */
+.card-body {
+  padding: 1rem 1.05rem 1.15rem 1.05rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+/* --- Tags: small “section label” style --- */
+.listing-categories {
+  margin: 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.listing-category {
+  background: rgba(61, 155, 255, 0.10) !important;
+  border: 1px solid rgba(31, 127, 232, 0.18) !important;
+  border-radius: 0.25rem !important; /* more “label”, less “pill” */
+  color: #1a66b8 !important;
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+
+  padding: 4px 8px !important;
+}
+
+/* --- Headline: bold, Vox-ish --- */
+.card-title {
+  margin: 0 !important;
+  color: #0f172a !important;
+  font-weight: 900 !important;
+  font-size: 1.25rem !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.02em !important;
+
+  /* clamp like a news grid */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.quarto-grid-link:hover .card-title {
+  color: #0f172a !important;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* --- Sort dropdown: fix double arrow --- */
+.form-select {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231a66b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right .9rem center !important;
+  background-size: 16px 12px !important;
+  padding-right: 2.2rem !important;
+}
+
+.form-select::after,
+.form-select::-ms-expand {
+  display: none !important;
+}
+
+
+/* 1) Add space between sort/filter controls and the tiles */
+.listing-actions-group {
+  margin-bottom: 2rem !important;
+}
+
+/* (extra safety) add a little top padding to the tile area */
+.quarto-listing-container-grid,
+.quarto-listing-container-grid .quarto-grid,
+.quarto-listing-container-grid .grid {
+  padding-top: 0.25rem !important;
+}
+
+/* 2) Image: center it AND avoid cutting off content */
+p.card-img-top,
+.card-img-top {
+  position: relative;          /* needed for overlay */
+  background: #f2f9ff !important; /* brand-50 behind letterboxing */
+}
+
+/* IMPORTANT: no cut-off = use contain (will letterbox instead of cropping) */
+.card-img-top img {
+  object-fit: contain !important;     /* prevents cropping */
+  object-position: center !important; /* keeps it centered */
+  background: #f2f9ff !important;     /* fills any empty space */
+}
+
+/* 3) Slight blue tint overlay on top of the image */
+p.card-img-top::after,
+.card-img-top::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(61, 155, 255, 0.14); /* light blue tint */
+  pointer-events: none;
+}

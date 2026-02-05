@@ -1,0 +1,13 @@
+---
+title: "Quick Metric: Contact → Show Rate"
+date: 2026-02-03
+categories: [cloud, field, data]
+image: images/mylittledonkey.png
+---
+
+A simple weekly check: **how many scheduled voters actually show up** (events, canvass shifts, trainings).
+
+If the show rate drops, try:
+- confirm the day before
+- send a map + time estimate
+- offer a buddy option (bring a friend)

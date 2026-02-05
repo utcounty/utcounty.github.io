@@ -1,0 +1,36 @@
+<style>
+  #title-block-header {
+    display: none !important;
+  }
+
+  /* If Quarto toggles the "no matching items" element on/off,
+     just hide it permanently. */
+  .listing-no-matching,
+  .listing-no-matching.d-none {
+    display: none !important;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Your hero title/subtitle injector
+    const settings = document.getElementById("hero-settings");
+
+    if (settings) {
+      const titleText = settings.getAttribute("data-title");
+      const subtitleText = settings.getAttribute("data-subtitle");
+
+      const titleEl = document.getElementById("hero-title");
+      const subtitleEl = document.getElementById("hero-subtitle");
+
+      if (titleEl && titleText) titleEl.innerText = titleText;
+      if (subtitleEl && subtitleText) subtitleEl.innerText = subtitleText;
+
+      settings.remove();
+    }
+
+    // Remove "No matching items" block if it exists
+    const noMatching = document.querySelector(".listing-no-matching");
+    if (noMatching) noMatching.remove();
+  });
+</script>
