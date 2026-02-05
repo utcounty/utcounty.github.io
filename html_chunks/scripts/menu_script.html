@@ -1,21 +1,38 @@
 <script>
   (function () {
-    const btn = document.getElementById("menuBtn");
-    const panel = document.getElementById("mobileNav");
-    if (!btn || !panel) return;
+    // Mark active nav item based on current page path (and hash for in-page anchors)
+    const path = (window.location.pathname || "").toLowerCase();
+    const hash = (window.location.hash || "").toLowerCase();
+    const links = document.querySelectorAll(".ucd-navlink[data-nav]");
 
-    btn.addEventListener("click", () => {
-      const isOpen = !panel.classList.contains("hidden");
-      panel.classList.toggle("hidden");
-      btn.setAttribute("aria-expanded", String(!isOpen));
-    });
+    // Decide which nav key should be active
+    let activeKey = "";
 
-    // Optional: close menu after clicking a link
-    panel.querySelectorAll("a").forEach((a) => {
-      a.addEventListener("click", () => {
-        panel.classList.add("hidden");
-        btn.setAttribute("aria-expanded", "false");
-      });
+    const isBlog = path.endsWith("/blog.html") || path.endsWith("blog.html");
+    const isMaps = path.endsWith("/maps.html") || path.endsWith("maps.html");
+    const isAbout = path.endsWith("/about.html") || path.endsWith("about.html");
+    const isHome = path.endsWith("/index.html") || path.endsWith("index.html") || path.endsWith("/");
+
+    if (isBlog) {
+      activeKey = "blog";
+    } else if (isMaps) {
+      activeKey = "maps";
+    } else if (isAbout) {
+      activeKey = "about";
+    } else if (isHome) {
+      // Home page uses anchors for sections
+      if (hash === "#maps") activeKey = "maps";
+      else if (hash === "#about") activeKey = "about";
+      else activeKey = ""; // no underline on home by default
+    }
+
+    links.forEach((a) => {
+      const key = (a.getAttribute("data-nav") || "").toLowerCase();
+      if (key && key === activeKey) {
+        a.setAttribute("aria-current", "page");
+      } else {
+        a.removeAttribute("aria-current");
+      }
     });
   })();
 </script>

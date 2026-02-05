@@ -1,31 +1,24 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Utah County Data for Progress",
+    "objectID": "data/geo/sources.html",
+    "href": "data/geo/sources.html",
+    "title": "Data Sources",
     "section": "",
-    "text": "Utah County Data for Progress\n\n  \n    \n      Utah County Data for Progress\n    \n\n    \n      A simple home for shared insights and practical links for organizing, messaging, and turnout.\n    \n\n    \n      \n        Go to the blog\n      \n\n      \n        View tools\n      \n    \n  \n\n\n\n  Tools\n  \n    Replace these with your real dashboards, docs, or calculators.\n  \n\n  \n    \n      Voter contact targets\n      Link to a calculator or spreadsheet.\n    \n\n    \n      Precinct notes template\n      A consistent format for local updates.\n    \n\n    \n      Shared dashboards\n      Trusted charts and reports in one place.\n    \n  \n\n\n\n  \n    About\n\n    \n      Keep this short: who it’s for, what belongs here, and how folks should contribute.\n    \n\n    \n      \n        Contact\n      \n\n      \n        Read the blog\n      \n    \n  \n\n\n\n  \n    \n      ©  Utah County Democrats\n\n      \n        Blog\n        Tools\n        About"
+    "text": "Statewide ballot area polygons were downloaded from Utah’s Open Data Portal:\n\nDataset: Utah VISTA Ballot Areas\nURL: https://opendata.gis.utah.gov/datasets/utah::utah-vista-ballot-areas/about\nOriginal file: VistaBallotAreas_-1176372527926423573.geojson\n\nProcessing: * Load the statewide GeoJSON * Filter to Utah County using CountyID == 25: * Keep only required fields: ['CountyID', 'PrecinctID', 'SubPrecinctID', 'geometry'] * Reproject for web mapping: WGS84 (EPSG:4326) * Lightly simplify geometry for performance: tolerance = 0.0001\nOutput: data/geo/utah_county_precincts.min.geojson"
   },
   {
-    "objectID": "index_old.html",
-    "href": "index_old.html",
-    "title": "\n          Utah County Democratic data & organizing notes\n        ",
+    "objectID": "data/geo/sources.html#utah-county-precinct-boundaries",
+    "href": "data/geo/sources.html#utah-county-precinct-boundaries",
+    "title": "Data Sources",
     "section": "",
-    "text": "Utah County Democratic data & organizing notes\n        \n        \n          A simple place to share local insights, strategy, and practical links for volunteers and organizers.\n        \n\n        \n          \n            Read the blog\n          \n          \n            View tools\n          \n        \n      \n\n      \n      \n        \n          Latest posts\n          Short updates. Practical info.\n        \n\n        \n          \n          \n            \n              Weekly field notes template\n              Feb 4, 2026\n            \n            \n              Keep notes consistent: what happened, what data we learned (with source), what changed, and next action.\n            \n            \n              Read more\n            \n          \n\n          \n          \n            \n              Turnout math (rough planning)\n              Jan 28, 2026\n            \n            \n              A quick way to estimate the number of contacts needed for a turnout goal using a simple impact assumption.\n            \n            \n              Read more\n            \n          \n\n          \n          \n            \n              Messaging: persuasion vs mobilization\n              Jan 20, 2026\n            \n            \n              Write separate messages for persuasion and turnout. Keep asks simple and locally specific.\n            \n            \n              Read more\n            \n          \n        \n      \n\n      \n      \n        Tools\n        \n          A small list of links and one quick calculator. Replace these placeholders with your real resources.\n        \n\n        \n          \n            Shared links hub\n            Dashboards, docs, voter file tools, training resources.\n          \n\n          \n            Quick turnout calculator\n            Estimate contacts needed for a turnout goal.\n          \n        \n      \n\n      \n      \n        Contact\n        \n          Add a contact email or a form link here.\n        \n\n        \n          \n            Email\n          \n          \n            Volunteer\n          \n        \n      \n\n      \n      \n        ©  Utah County Democrats"
+    "text": "Statewide ballot area polygons were downloaded from Utah’s Open Data Portal:\n\nDataset: Utah VISTA Ballot Areas\nURL: https://opendata.gis.utah.gov/datasets/utah::utah-vista-ballot-areas/about\nOriginal file: VistaBallotAreas_-1176372527926423573.geojson\n\nProcessing: * Load the statewide GeoJSON * Filter to Utah County using CountyID == 25: * Keep only required fields: ['CountyID', 'PrecinctID', 'SubPrecinctID', 'geometry'] * Reproject for web mapping: WGS84 (EPSG:4326) * Lightly simplify geometry for performance: tolerance = 0.0001\nOutput: data/geo/utah_county_precincts.min.geojson"
   },
   {
-    "objectID": "blog/test1.html",
-    "href": "blog/test1.html",
-    "title": "AJ Averett",
+    "objectID": "blog/welcome.html",
+    "href": "blog/welcome.html",
+    "title": "Welcome: What This Blog Is For",
     "section": "",
-    "text": "hello"
-  },
-  {
-    "objectID": "blog/test2.html",
-    "href": "blog/test2.html",
-    "title": "AJ Averett",
-    "section": "",
-    "text": "hi"
+    "text": "This is a lightweight place to share Utah County–specific political data and practical strategy.\n\nKeep posts short\nLink sources when you can\nEnd with one clear takeaway"
   },
   {
     "objectID": "blog/metric.html",
@@ -35,10 +28,24 @@
     "text": "A simple weekly check: how many scheduled voters actually show up (events, canvass shifts, trainings).\nIf the show rate drops, try: - confirm the day before - send a map + time estimate - offer a buddy option (bring a friend)"
   },
   {
-    "objectID": "blog/welcome.html",
-    "href": "blog/welcome.html",
-    "title": "Welcome: What This Blog Is For",
+    "objectID": "data/sources.html",
+    "href": "data/sources.html",
+    "title": "Data Sources",
     "section": "",
-    "text": "This is a lightweight place to share Utah County–specific political data and practical strategy.\n\nKeep posts short\nLink sources when you can\nEnd with one clear takeaway"
+    "text": "Statewide ballot area polygons were downloaded from Utah’s Open Data Portal:\n\nDataset: Utah VISTA Ballot Areas\nURL: https://opendata.gis.utah.gov/datasets/utah::utah-vista-ballot-areas/about\nOriginal file: VistaBallotAreas_-1176372527926423573.geojson\n\nProcessing:\n\nLoad the statewide GeoJSON\nFilter to Utah County using CountyID == 25:\nKeep only required fields: ['CountyID', 'PrecinctID', 'SubPrecinctID', 'geometry']\nReproject for web mapping: WGS84 (EPSG:4326)\nLightly simplify geometry for performance: tolerance = 0.0001\n\nOutput: data/geo/utah_county_precincts.min.geojson\n\n\n\n2025-11-04 Utah County Municipal General Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/general11042025/voters * File Name: 20251104_utah_county_municipal_general_election.json * Original File Name: export-general11042025.json\n2025-08-12 Utah County Municipal Primary Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/primary08122025/voters * File Name: 20250812_utah_county_municipal_primary_election.json * Original File Name: export-primary08122025.json\n2024-11-05 Utah County General Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/general11052024/voters * File Name: 20241105_utah_county_general_election.json * Original File Name: export-general11052024.json\n2024-06-25 Utah County Primary Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/primary06252024/voters * File Name: 20240625_utah_county_primary_election.json * Original File Name: export-primary06252024.json\n2024-03-05 Utah County Presidential Preference Primary Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/primary03052024/voters * File Name: 20Original File Name: 240305_utah_county_presidential_preference_primary_election.json * export-primary03052024.json\n2023-11-21 Utah County General Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/2023-Nov-General/voters * File Name: 20231121_utah_county_general_election.json * Original File Name: export-2023-Nov-General.json"
+  },
+  {
+    "objectID": "data/sources.html#utah-county-precinct-boundaries",
+    "href": "data/sources.html#utah-county-precinct-boundaries",
+    "title": "Data Sources",
+    "section": "",
+    "text": "Statewide ballot area polygons were downloaded from Utah’s Open Data Portal:\n\nDataset: Utah VISTA Ballot Areas\nURL: https://opendata.gis.utah.gov/datasets/utah::utah-vista-ballot-areas/about\nOriginal file: VistaBallotAreas_-1176372527926423573.geojson\n\nProcessing:\n\nLoad the statewide GeoJSON\nFilter to Utah County using CountyID == 25:\nKeep only required fields: ['CountyID', 'PrecinctID', 'SubPrecinctID', 'geometry']\nReproject for web mapping: WGS84 (EPSG:4326)\nLightly simplify geometry for performance: tolerance = 0.0001\n\nOutput: data/geo/utah_county_precincts.min.geojson"
+  },
+  {
+    "objectID": "data/sources.html#turnout-data",
+    "href": "data/sources.html#turnout-data",
+    "title": "Data Sources",
+    "section": "",
+    "text": "2025-11-04 Utah County Municipal General Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/general11042025/voters * File Name: 20251104_utah_county_municipal_general_election.json * Original File Name: export-general11042025.json\n2025-08-12 Utah County Municipal Primary Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/primary08122025/voters * File Name: 20250812_utah_county_municipal_primary_election.json * Original File Name: export-primary08122025.json\n2024-11-05 Utah County General Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/general11052024/voters * File Name: 20241105_utah_county_general_election.json * Original File Name: export-general11052024.json\n2024-06-25 Utah County Primary Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/primary06252024/voters * File Name: 20240625_utah_county_primary_election.json * Original File Name: export-primary06252024.json\n2024-03-05 Utah County Presidential Preference Primary Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/primary03052024/voters * File Name: 20Original File Name: 240305_utah_county_presidential_preference_primary_election.json * export-primary03052024.json\n2023-11-21 Utah County General Election * Link: https://electionresults.utah.gov/results/public/utah-county-ut/elections/2023-Nov-General/voters * File Name: 20231121_utah_county_general_election.json * Original File Name: export-2023-Nov-General.json"
   }
 ]

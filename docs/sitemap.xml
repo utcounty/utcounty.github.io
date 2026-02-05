@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://ajaverett.com/index.html</loc>
-    <lastmod>2026-02-05T03:38:20.186Z</lastmod>
+    <loc>https://ajaverett.com/maps.html</loc>
+    <lastmod>2026-02-05T22:56:31.956Z</lastmod>
   </url>
   <url>
-    <loc>https://ajaverett.com/blocks.html</loc>
-    <lastmod>2025-12-30T05:39:03.254Z</lastmod>
+    <loc>https://ajaverett.com/data/geo/sources.html</loc>
+    <lastmod>2026-02-05T21:48:12.220Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ajaverett.com/blog/welcome.html</loc>
+    <lastmod>2026-02-05T04:01:18.972Z</lastmod>
   </url>
   <url>
     <loc>https://ajaverett.com/about.html</loc>
-    <lastmod>2025-12-30T05:40:51.414Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ajaverett.com/index_old.html</loc>
-    <lastmod>2026-02-05T03:18:22.113Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ajaverett.com/blog.html</loc>
-    <lastmod>2026-02-05T04:10:46.987Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ajaverett.com/blog/test1.html</loc>
-    <lastmod>2026-02-05T03:42:15.010Z</lastmod>
-  </url>
-  <url>
-    <loc>https://ajaverett.com/blog/test2.html</loc>
-    <lastmod>2026-02-05T03:42:13.257Z</lastmod>
+    <lastmod>2026-02-05T23:01:25.108Z</lastmod>
   </url>
   <url>
     <loc>https://ajaverett.com/blog/metric.html</loc>
     <lastmod>2026-02-05T04:01:23.573Z</lastmod>
   </url>
   <url>
-    <loc>https://ajaverett.com/blog/welcome.html</loc>
-    <lastmod>2026-02-05T04:01:18.972Z</lastmod>
+    <loc>https://ajaverett.com/blog.html</loc>
+    <lastmod>2026-02-05T06:57:39.156Z</lastmod>
+  </url>
+  <url>
+    <loc>https://ajaverett.com/data/sources.html</loc>
+    <lastmod>2026-02-05T22:33:37.797Z</lastmod>
   </url>
 </urlset>

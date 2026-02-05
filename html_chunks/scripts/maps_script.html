@@ -1,0 +1,349 @@
+<script>
+  (function () {
+    // =========================================================
+    // Config (keep maintainable)
+    // =========================================================
+    const CFG = {
+      datasetUrl: "data/geo/utah_county_precincts.min.geojson",
+      searchField: "PrecinctID",
+      displayFields: ["PrecinctID", "SubPrecinctID", "CountyID"],
+      defaultView: { center: [40.2338, -111.6585], zoom: 10 },
+      fitPadding: [24, 24],
+      typeahead: { limit: 10, minChars: 1 },
+    };
+
+    // =========================================================
+    // DOM
+    // =========================================================
+    const ui = {
+      search: document.getElementById("precinctSearch"),
+      results: document.getElementById("precinctResults"),
+      status: document.getElementById("statusMsg"),
+      selection: document.getElementById("selectionBox"),
+      btnGo: document.getElementById("btnGo"),
+      btnReset: document.getElementById("btnReset"),
+      togglePrecincts: document.getElementById("togglePrecincts"),
+    };
+
+    // =========================================================
+    // Map
+    // =========================================================
+    const map = L.map("map", { zoomControl: true }).setView(CFG.defaultView.center, CFG.defaultView.zoom);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap",
+    }).addTo(map);
+
+    // =========================================================
+    // State / indexes
+    // =========================================================
+    let precinctLayer = null;
+
+    // normalized PrecinctID -> { id, layers: [layer...], propsSample }
+    const index = new Map();
+    let keys = [];
+
+    let selectedKey = null;
+    let selectedLayers = [];
+
+    // =========================================================
+    // Styling
+    // =========================================================
+    const style = {
+      base: () => ({
+        color: "#64748b",
+        weight: 1,
+        opacity: 0.85,
+        fillColor: "#3d9bff",
+        fillOpacity: 0.06,
+      }),
+      highlight: () => ({
+        color: "#1a66b8",
+        weight: 3,
+        opacity: 1,
+        fillColor: "#3d9bff",
+        fillOpacity: 0.18,
+      }),
+    };
+
+    // =========================================================
+    // Helpers
+    // =========================================================
+    const norm = (v) => (v ?? "").toString().trim().toUpperCase();
+
+    function setStatus(msg, tone = "normal") {
+      if (!ui.status) return;
+      ui.status.textContent = msg;
+      ui.status.className = "mt-3 text-sm " + (tone === "error" ? "text-red-700" : "text-slate-600");
+    }
+
+    function setSelection(html) {
+      if (ui.selection) ui.selection.innerHTML = html;
+    }
+
+    function safe(v) {
+      return v === null || v === undefined || v === "" ? "—" : String(v);
+    }
+
+    function infoHTML(props) {
+      const p = props || {};
+      return `
+        <div class="space-y-1">
+          <div>
+            <span class="text-xs uppercase tracking-wider text-slate-500">PrecinctID</span>
+            <div class="font-mono text-slate-900">${safe(p.PrecinctID)}</div>
+          </div>
+          <div>
+            <span class="text-xs uppercase tracking-wider text-slate-500">CountyID</span>
+            <div class="font-mono text-slate-900">${safe(p.CountyID)}</div>
+          </div>
+        </div>
+      `;
+      }
+
+    function hideResults() {
+      if (!ui.results) return;
+      ui.results.classList.add("hidden");
+      ui.results.innerHTML = "";
+    }
+
+    function showResults(ids) {
+      if (!ui.results) return;
+      if (!ids.length) return hideResults();
+
+      ui.results.innerHTML = ids
+        .map(
+          (id) => `
+          <button type="button"
+            class="w-full px-3 py-2 text-left text-sm hover:bg-slate-50"
+            data-pick="${id}">
+            <span class="font-mono">${id}</span>
+          </button>
+        `
+        )
+        .join("");
+
+      ui.results.classList.remove("hidden");
+
+      ui.results.querySelectorAll("[data-pick]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-pick") || "";
+          ui.search.value = id;
+          hideResults();
+          selectByInput(id);
+        });
+      });
+    }
+
+    function clearHighlight() {
+      selectedKey = null;
+
+      if (precinctLayer) {
+        selectedLayers.forEach((lyr) => {
+          try {
+            precinctLayer.resetStyle(lyr);
+          } catch {}
+        });
+      }
+
+      selectedLayers = [];
+      map.closePopup();
+      setSelection("None selected.");
+    }
+
+    function resetAll() {
+      clearHighlight();
+      hideResults();
+      if (ui.search) ui.search.value = "";
+      map.setView(CFG.defaultView.center, CFG.defaultView.zoom);
+      setStatus("Ready.");
+    }
+
+    function layersBounds(layers) {
+      return L.featureGroup(layers).getBounds();
+    }
+
+    function applyHighlight(key) {
+      clearHighlight();
+
+      const entry = index.get(key);
+      if (!entry) return;
+
+      selectedKey = key;
+      selectedLayers = entry.layers;
+
+      selectedLayers.forEach((lyr) => {
+        lyr.setStyle(style.highlight());
+        try {
+          lyr.bringToFront();
+        } catch {}
+      });
+
+      const b = layersBounds(selectedLayers);
+      map.fitBounds(b, { padding: CFG.fitPadding });
+
+      const popupHtml = `
+        <div style="min-width: 220px">
+          <div style="font-weight:700; margin-bottom:6px;">Precinct</div>
+          ${infoHTML(entry.propsSample)}
+        </div>
+      `;
+
+      L.popup({ closeButton: true, autoPan: true })
+        .setLatLng(b.getCenter())
+        .setContent(popupHtml)
+        .openOn(map);
+
+      setSelection(infoHTML(entry.propsSample));
+
+      const count = entry.layers.length;
+      setStatus(count > 1 ? `Selected ${entry.id} (${count} features)` : `Selected ${entry.id}`);
+
+      // Hook: update precinct report panel if present
+      window.UCD_LAST_SELECTED_PRECINCT = entry.id;
+      if (window.UCDReports && typeof window.UCDReports.renderForPrecinct === "function") {
+        window.UCDReports.renderForPrecinct(entry.id);
+      }
+    }
+
+    function selectByInput(raw) {
+      const key = norm(raw);
+      if (!key) return setStatus("Enter a PrecinctID.", "error");
+
+      if (!index.has(key)) {
+        clearHighlight();
+        setStatus(`No precinct found for "${raw}".`, "error");
+        setSelection(
+          `<span class="text-red-700">No precinct found for <span class="font-mono">${safe(raw)}</span>.</span>`
+        );
+
+        // Clear report if present
+        window.UCD_LAST_SELECTED_PRECINCT = "";
+        const report = document.getElementById("reportBox");
+        if (report) report.innerHTML = "Select a precinct to populate this report.";
+
+        return;
+      }
+
+      applyHighlight(key);
+    }
+
+    // =========================================================
+    // GeoJSON loading + indexing
+    // =========================================================
+    async function loadPrecincts() {
+      setStatus("Loading precinct boundaries…");
+
+      let geojson;
+      try {
+        const res = await fetch(CFG.datasetUrl, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        geojson = await res.json();
+      } catch (err) {
+        console.error(err);
+        setStatus("Failed to load precinct GeoJSON. Check the file path and site build output.", "error");
+        return;
+      }
+
+      precinctLayer = L.geoJSON(geojson, {
+        style: style.base,
+        onEachFeature: (feature, layer) => {
+          const props = feature && feature.properties ? feature.properties : {};
+          const rawId = props[CFG.searchField];
+          const key = norm(rawId);
+          if (!key) return;
+
+          const existing = index.get(key);
+          if (!existing) {
+            index.set(key, {
+              id: String(rawId).trim(),
+              layers: [layer],
+              propsSample: {
+                PrecinctID: props.PrecinctID,
+                CountyID: props.CountyID,
+              },
+            });
+          } else {
+            existing.layers.push(layer);
+          }
+
+          layer.on("click", () => {
+            if (ui.search) ui.search.value = index.get(key)?.id ?? String(rawId);
+            hideResults();
+            applyHighlight(key);
+          });
+        },
+      });
+
+      precinctLayer.addTo(map);
+      keys = Array.from(index.keys()).sort();
+      setStatus(`Ready. Loaded ${keys.length.toLocaleString()} precinct IDs.`);
+    }
+
+    // =========================================================
+    // Typeahead
+    // =========================================================
+    function suggestions(query) {
+      const q = norm(query);
+      if (!q || q.length < CFG.typeahead.minChars) return [];
+
+      const out = [];
+      for (let i = 0; i < keys.length; i++) {
+        const k = keys[i];
+        if (k.includes(q)) {
+          out.push(index.get(k).id);
+          if (out.length >= CFG.typeahead.limit) break;
+        }
+      }
+      return out;
+    }
+
+    if (ui.search) {
+      ui.search.addEventListener("input", () => {
+        const s = suggestions(ui.search.value || "");
+        if (!s.length) return hideResults();
+        showResults(s);
+      });
+
+      ui.search.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          hideResults();
+          selectByInput(ui.search.value);
+        }
+        if (e.key === "Escape") hideResults();
+      });
+    }
+
+    if (ui.btnGo) {
+      ui.btnGo.addEventListener("click", () => {
+        hideResults();
+        selectByInput(ui.search.value);
+      });
+    }
+
+    if (ui.btnReset) {
+      ui.btnReset.addEventListener("click", resetAll);
+    }
+
+    document.addEventListener("click", (e) => {
+      const within = (ui.results && ui.results.contains(e.target)) || (ui.search && ui.search.contains(e.target));
+      if (!within) hideResults();
+    });
+
+    if (ui.togglePrecincts) {
+      ui.togglePrecincts.addEventListener("change", () => {
+        if (!precinctLayer) return;
+        if (ui.togglePrecincts.checked) precinctLayer.addTo(map);
+        else map.removeLayer(precinctLayer);
+      });
+    }
+
+    // =========================================================
+    // Start
+    // =========================================================
+    resetAll();
+    loadPrecincts();
+  })();
+</script>

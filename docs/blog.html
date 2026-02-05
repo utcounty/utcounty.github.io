@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data for Progress Blog – AJ Averett</title>
+<title>Data for Progress Blog – Utah County Democrats</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -192,113 +192,53 @@ ul.task-list li input[type="checkbox"] {
 
 <link rel="stylesheet" href="styles/styles.css">
 <link rel="stylesheet" href="styles/listing_styles.css">
-<link rel="alternate" type="application/rss+xml" title="AJ Averett" href="blog.xml" data-external="1"><meta property="og:title" content="Data for Progress Blog – AJ Averett">
-<meta property="og:site_name" content="AJ Averett">
-<meta name="twitter:title" content="Data for Progress Blog – AJ Averett">
+<link rel="alternate" type="application/rss+xml" title="Utah County Democrats" href="blog.xml" data-external="1"><meta property="og:title" content="Data for Progress Blog – Utah County Democrats">
+<meta property="og:site_name" content="Utah County Democrats">
+<meta name="twitter:title" content="Data for Progress Blog – Utah County Democrats">
 <meta name="twitter:card" content="summary">
 </head>
 
 <body>
 
-<header class="border-b border-slate-200 bg-white">
+<header class="ucd-masthead">
 
-  <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-
-    <a href="./index.html" class="flex items-center gap-3">
-
-      <div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-800">
-
-        <svg width="18" height="18" viewbox="0 0 24 24" fill="none" aria-hidden="true">
-
-          <path d="M5 12c3.2-4.6 10.8-4.6 14 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
-
-          <path d="M7.5 15c2.1-3 6.9-3 9 0" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
-
-          <circle cx="12" cy="17.5" r="1.3" fill="currentColor"></circle>
-
-        </svg>
-
-      </div>
+  <div class="ucd-rule ucd-rule--top" aria-hidden="true"></div>
 
 
 
-      <div class="leading-tight">
+  <div class="ucd-masthead-inner">
 
-        <div class="text-sm font-semibold">Utah County Democrats</div>
+    <a class="ucd-wordmark" href="./index.html">
 
-        <div class="text-xs text-slate-500">Data + Strategy Sharing</div>
-
-      </div>
+      Utah County Democrats
 
     </a>
 
 
 
-    <nav class="hidden items-center gap-6 text-sm sm:flex">
+    <br>
 
-      <a href="./blog.html" class="text-slate-700 hover:text-slate-900">Blog</a>
 
-      <a href="#tools" class="text-slate-700 hover:text-slate-900">Tools</a>
 
-      <a href="#about" class="text-slate-700 hover:text-slate-900">About</a>
+    <nav class="ucd-nav" aria-label="Primary">
+
+      <a class="ucd-navlink" href="./blog.html" data-nav="blog">Blog</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="./maps.html" data-nav="maps">Maps</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="./about.html" data-nav="about">About</a>
 
     </nav>
 
-
-
-    <div class="flex items-center gap-2">
-
-      <a href="./blog.html" class="hidden rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700 sm:inline-flex">
-
-        Read the blog
-
-      </a>
-
-
-
-      <button id="menuBtn" class="inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 sm:hidden" type="button" aria-label="Open menu" aria-expanded="false">
-
-        <svg width="20" height="20" viewbox="0 0 24 24" fill="none">
-
-          <path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-
-        </svg>
-
-      </button>
-
-    </div>
-
   </div>
 
 
 
-  <!-- Mobile menu -->
-
-  <div id="mobileNav" class="hidden border-t border-slate-200 bg-white sm:hidden">
-
-    <div class="mx-auto max-w-5xl px-4 py-3">
-
-      <div class="flex flex-col gap-2 text-sm">
-
-        <a href="./blog.html" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">Blog</a>
-
-        <a href="#tools" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">Tools</a>
-
-        <a href="#about" class="rounded-lg px-3 py-2 text-slate-700 hover:bg-slate-50">About</a>
-
-
-
-        <a href="./blog.html" class="mt-1 inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white hover:bg-brand-700">
-
-          Read the blog
-
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
+  <div class="ucd-rule ucd-rule--bottom" aria-hidden="true"></div>
 
 </header>
 
@@ -447,37 +387,71 @@ No matching items
 
   (function () {
 
-    const btn = document.getElementById("menuBtn");
+    // Mark active nav item based on current page path (and hash for in-page anchors)
 
-    const panel = document.getElementById("mobileNav");
+    const path = (window.location.pathname || "").toLowerCase();
 
-    if (!btn || !panel) return;
+    const hash = (window.location.hash || "").toLowerCase();
 
-
-
-    btn.addEventListener("click", () => {
-
-      const isOpen = !panel.classList.contains("hidden");
-
-      panel.classList.toggle("hidden");
-
-      btn.setAttribute("aria-expanded", String(!isOpen));
-
-    });
+    const links = document.querySelectorAll(".ucd-navlink[data-nav]");
 
 
 
-    // Optional: close menu after clicking a link
+    // Decide which nav key should be active
 
-    panel.querySelectorAll("a").forEach((a) => {
+    let activeKey = "";
 
-      a.addEventListener("click", () => {
 
-        panel.classList.add("hidden");
 
-        btn.setAttribute("aria-expanded", "false");
+    const isBlog = path.endsWith("/blog.html") || path.endsWith("blog.html");
 
-      });
+    const isMaps = path.endsWith("/maps.html") || path.endsWith("maps.html");
+
+    const isAbout = path.endsWith("/about.html") || path.endsWith("about.html");
+
+    const isHome = path.endsWith("/index.html") || path.endsWith("index.html") || path.endsWith("/");
+
+
+
+    if (isBlog) {
+
+      activeKey = "blog";
+
+    } else if (isMaps) {
+
+      activeKey = "maps";
+
+    } else if (isAbout) {
+
+      activeKey = "about";
+
+    } else if (isHome) {
+
+      // Home page uses anchors for sections
+
+      if (hash === "#maps") activeKey = "maps";
+
+      else if (hash === "#about") activeKey = "about";
+
+      else activeKey = ""; // no underline on home by default
+
+    }
+
+
+
+    links.forEach((a) => {
+
+      const key = (a.getAttribute("data-nav") || "").toLowerCase();
+
+      if (key && key === activeKey) {
+
+        a.setAttribute("aria-current", "page");
+
+      } else {
+
+        a.removeAttribute("aria-current");
+
+      }
 
     });
 

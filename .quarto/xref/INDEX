@@ -25,5 +25,14 @@
   },
   "blog/welcome.qmd": {
     "welcome.html": "32d6fa52"
+  },
+  "maps.qmd": {
+    "maps.html": "9187b3a4"
+  },
+  "data/geo/sources.md": {
+    "sources.html": "a2e97897"
+  },
+  "data/sources.md": {
+    "sources.html": "b436d381"
   }
 }

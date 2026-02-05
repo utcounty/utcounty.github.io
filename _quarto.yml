@@ -7,22 +7,16 @@ project:
 
 
 website:
-  title: "AJ Averett"
+  title: "Utah County Democrats"
   favicon: images\favicon.png
-  description: "Senior Consultant at Booz Allen & Adjunct Faculty at MTECH"
+  description: "Utah County Data for Progress"
   site-url: "https://ajaverett.com" 
   open-graph: true
   twitter-card: true
 
-  # navbar:
-  #   background: "#0f172a"
-  #   foreground: light
-  #   pinned: true
-  #   collapse: true
 
 format:
   html:
-    theme: cosmo
-    # css: styles.css
+    css: styles/styles.css
 
 

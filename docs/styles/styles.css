@@ -6,3 +6,156 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+/* =========================================================
+   Editorial Masthead (newspaper vibe)
+   ========================================================= */
+
+.ucd-masthead {
+  background: #ffffff;
+}
+
+.ucd-masthead-inner {
+  max-width: 64rem;              /* ~ max-w-5xl */
+  margin: 0 auto;
+  padding: 1.75rem 1rem 1.25rem 1rem;  /* taller, airy */
+  text-align: center;
+}
+
+.ucd-rule {
+  height: 1px;
+  background: rgba(15, 23, 42, 0.12); /* subtle slate hairline */
+}
+
+.ucd-rule--top {
+  background: rgba(15, 23, 42, 0.10);
+}
+
+.ucd-rule--bottom {
+  background: rgba(15, 23, 42, 0.12);
+}
+
+/* Wordmark: strong + calm */
+.ucd-wordmark {
+  display: inline-block;
+  color: #0f172a;                /* slate-900 */
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  text-decoration: none !important;
+}
+
+/* Subtitle (“dek”) */
+.ucd-dek {
+  margin-top: 0.4rem;
+  color: #475569;                /* slate-600 */
+  font-size: 0.95rem;
+}
+
+/* Nav line under wordmark */
+.ucd-nav {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.08); /* inner divider */
+}
+
+/* Links: small caps / letterspaced */
+.ucd-navlink {
+  position: relative;
+  color: #0f172a;
+  text-decoration: none !important;
+
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+
+  padding: 0.35rem 0.25rem;
+  opacity: 0.82;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.ucd-navlink:hover {
+  opacity: 1;
+  color: #0f172a;
+}
+
+/* Separator dot */
+.ucd-dot {
+  color: rgba(15, 23, 42, 0.35);
+  font-size: 1rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Tiny blue accent under active section */
+.ucd-navlink[aria-current="page"] {
+  opacity: 1;
+}
+
+.ucd-navlink[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -4px;
+  height: 2px;
+  background: rgba(31, 127, 232, 0.95); /* your brand blue */
+  border-radius: 9999px;
+}
+
+/* Mobile: slightly tighter masthead */
+@media (max-width: 480px) {
+  .ucd-masthead-inner {
+    padding: 1.4rem 1rem 1rem 1rem;
+  }
+  .ucd-dek {
+    font-size: 0.9rem;
+  }
+  .ucd-navlink {
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* =========================
+   MAPS PAGE SMALL POLISH
+   ========================= */
+#map {
+  background: #f2f9ff; /* brand-50 behind tiles while loading */
+}
+
+/* Make dropdown buttons feel clean */
+#precinctResults button {
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+#precinctResults button:first-child {
+  border-top: none;
+}
+
+/* =========================
+   Precinct report styling
+   ========================= */
+#reportBox details > summary::-webkit-details-marker {
+  display: none;
+}
+
+#reportBox summary::after {
+  content: "▾";
+  margin-left: 0.5rem;
+  color: rgba(15, 23, 42, 0.55);
+}
+
+#reportBox details[open] summary::after {
+  content: "▴";
+}
+
+#reportBox table {
+  border-collapse: collapse;
+}

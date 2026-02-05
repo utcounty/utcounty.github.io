@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Maps – Utah County Democrats</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<link href="./images/favicon.png" rel="icon" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+
+<script>
+
+  tailwind.config = {
+
+    theme: {
+
+      extend: {
+
+        colors: {
+
+          brand: {
+
+            50: "#f2f9ff",
+
+            100: "#e6f3ff",
+
+            200: "#cfe8ff",
+
+            300: "#a7d4ff",
+
+            400: "#73b8ff",
+
+            500: "#3d9bff",
+
+            600: "#1f7fe8",
+
+            700: "#1a66b8",
+
+            800: "#194f8a",
+
+            900: "#173f6a",
+
+          },
+
+        },
+
+      },
+
+    },
+
+  };
+
+</script>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    document.body.classList.add("min-h-screen", "bg-white", "text-slate-900");
+
+  });
+
+</script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+
+
+<link rel="stylesheet" href="styles/styles.css">
+<meta property="og:title" content="Maps – Utah County Democrats">
+<meta property="og:site_name" content="Utah County Democrats">
+<meta name="twitter:title" content="Maps – Utah County Democrats">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+
+<header class="ucd-masthead">
+
+  <div class="ucd-rule ucd-rule--top" aria-hidden="true"></div>
+
+
+
+  <div class="ucd-masthead-inner">
+
+    <a class="ucd-wordmark" href="./index.html">
+
+      Utah County Democrats
+
+    </a>
+
+
+
+    <br>
+
+
+
+    <nav class="ucd-nav" aria-label="Primary">
+
+      <a class="ucd-navlink" href="./blog.html" data-nav="blog">Blog</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="./maps.html" data-nav="maps">Maps</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="./about.html" data-nav="about">About</a>
+
+    </nav>
+
+  </div>
+
+
+
+  <div class="ucd-rule ucd-rule--bottom" aria-hidden="true"></div>
+
+</header>
+
+
+<header id="title-block-header">
+<h1 class="title">Maps</h1>
+
+</header>
+
+
+<div class="column-screen">
+<section class="bg-brand-50">
+  <div class="mx-auto max-w-6xl px-4 py-10">
+    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Maps</h1>
+    <p class="mt-2 max-w-2xl text-base text-slate-700">
+      Search precincts by <span class="font-semibold">PrecinctID</span> and highlight boundaries.
+    </p>
+  </div>
+</section>
+
+<section class="mx-auto max-w-6xl px-4 py-10">
+  <div class="grid gap-6 lg:grid-cols-12">
+    <!-- Controls -->
+    <aside class="lg:col-span-4">
+      <div class="rounded-xl border border-slate-200 bg-white p-5">
+        <div class="text-sm font-semibold text-slate-900">Precinct search</div>
+        <p class="mt-1 text-sm text-slate-600">Search by PrecinctID (example: <span class="font-mono">25SR15</span>).</p>
+
+        <div class="mt-3">
+          <label class="sr-only" for="precinctSearch">PrecinctID</label>
+
+          <div class="relative">
+            <input id="precinctSearch" type="text" placeholder="Enter PrecinctID…" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-[rgba(61,155,255,0.18)]" autocomplete="off" spellcheck="false">
+
+            <!-- typeahead dropdown -->
+            <div id="precinctResults" class="absolute z-20 mt-1 hidden w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm"></div>
+          </div>
+
+          <div class="mt-3 flex gap-2">
+            <button id="btnGo" type="button" class="inline-flex w-full items-center justify-center rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-700">
+              Go
+            </button>
+            <button id="btnReset" type="button" class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50" title="Reset view">
+              Reset
+            </button>
+          </div>
+
+          <div id="statusMsg" class="mt-3 text-sm text-slate-600">
+            Loading precinct boundaries…
+          </div>
+        </div>
+
+        <hr class="my-5 border-slate-200">
+
+        <div class="text-sm font-semibold text-slate-900">Layers</div>
+        <div class="mt-3">
+          <label class="flex cursor-pointer items-center gap-3">
+            <input id="togglePrecincts" type="checkbox" class="h-4 w-4" checked="">
+            <span class="text-sm text-slate-800">Precinct boundaries</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-6 rounded-xl border border-slate-200 bg-white p-5">
+        <div class="text-sm font-semibold text-slate-900">Selection</div>
+        <div id="selectionBox" class="mt-2 text-sm text-slate-600">
+          None selected.
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map -->
+    <div class="lg:col-span-8">
+      <div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <div class="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+          <div class="text-sm font-semibold text-slate-900">Utah County precincts</div>
+          <div class="text-xs text-slate-500">Leaflet</div>
+        </div>
+
+        <div id="map" class="h-[560px] w-full"></div>
+      </div>
+
+      <div class="mt-6 rounded-xl border border-slate-200 bg-white p-5">
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div class="text-sm font-semibold text-slate-900">Precinct report</div>
+            <p class="mt-1 text-sm text-slate-600">
+              Vote totals by contest for the selected precinct (from your JSON files).
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="electionSelect" class="text-xs font-semibold text-slate-600">Election</label>
+            <select id="electionSelect" class="form-select rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
+              <option value="">Loading…</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="reportBox" class="mt-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
+          Select a precinct to populate this report.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+
+<script>
+
+  (function () {
+
+    // Mark active nav item based on current page path (and hash for in-page anchors)
+
+    const path = (window.location.pathname || "").toLowerCase();
+
+    const hash = (window.location.hash || "").toLowerCase();
+
+    const links = document.querySelectorAll(".ucd-navlink[data-nav]");
+
+
+
+    // Decide which nav key should be active
+
+    let activeKey = "";
+
+
+
+    const isBlog = path.endsWith("/blog.html") || path.endsWith("blog.html");
+
+    const isMaps = path.endsWith("/maps.html") || path.endsWith("maps.html");
+
+    const isAbout = path.endsWith("/about.html") || path.endsWith("about.html");
+
+    const isHome = path.endsWith("/index.html") || path.endsWith("index.html") || path.endsWith("/");
+
+
+
+    if (isBlog) {
+
+      activeKey = "blog";
+
+    } else if (isMaps) {
+
+      activeKey = "maps";
+
+    } else if (isAbout) {
+
+      activeKey = "about";
+
+    } else if (isHome) {
+
+      // Home page uses anchors for sections
+
+      if (hash === "#maps") activeKey = "maps";
+
+      else if (hash === "#about") activeKey = "about";
+
+      else activeKey = ""; // no underline on home by default
+
+    }
+
+
+
+    links.forEach((a) => {
+
+      const key = (a.getAttribute("data-nav") || "").toLowerCase();
+
+      if (key && key === activeKey) {
+
+        a.setAttribute("aria-current", "page");
+
+      } else {
+
+        a.removeAttribute("aria-current");
+
+      }
+
+    });
+
+  })();
+
+</script>
+
+<script>
+
+  (function () {
+
+    const yearEl = document.getElementById("year");
+
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  })();
+
+</script>
+
+<style>
+
+  #title-block-header {
+
+    display: none !important;
+
+  }
+
+
+
+  /* If Quarto toggles the "no matching items" element on/off,
+
+     just hide it permanently. */
+
+  .listing-no-matching,
+
+  .listing-no-matching.d-none {
+
+    display: none !important;
+
+  }
+
+</style>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    // Your hero title/subtitle injector
+
+    const settings = document.getElementById("hero-settings");
+
+
+
+    if (settings) {
+
+      const titleText = settings.getAttribute("data-title");
+
+      const subtitleText = settings.getAttribute("data-subtitle");
+
+
+
+      const titleEl = document.getElementById("hero-title");
+
+      const subtitleEl = document.getElementById("hero-subtitle");
+
+
+
+      if (titleEl && titleText) titleEl.innerText = titleText;
+
+      if (subtitleEl && subtitleText) subtitleEl.innerText = subtitleText;
+
+
+
+      settings.remove();
+
+    }
+
+
+
+    // Remove "No matching items" block if it exists
+
+    const noMatching = document.querySelector(".listing-no-matching");
+
+    if (noMatching) noMatching.remove();
+
+  });
+
+</script>
+
+<script>
+
+  (function () {
+
+    // =========================================================
+
+    // Config (keep maintainable)
+
+    // =========================================================
+
+    const CFG = {
+
+      datasetUrl: "data/geo/utah_county_precincts.min.geojson",
+
+      searchField: "PrecinctID",
+
+      displayFields: ["PrecinctID", "SubPrecinctID", "CountyID"],
+
+      defaultView: { center: [40.2338, -111.6585], zoom: 10 },
+
+      fitPadding: [24, 24],
+
+      typeahead: { limit: 10, minChars: 1 },
+
+    };
+
+
+
+    // =========================================================
+
+    // DOM
+
+    // =========================================================
+
+    const ui = {
+
+      search: document.getElementById("precinctSearch"),
+
+      results: document.getElementById("precinctResults"),
+
+      status: document.getElementById("statusMsg"),
+
+      selection: document.getElementById("selectionBox"),
+
+      btnGo: document.getElementById("btnGo"),
+
+      btnReset: document.getElementById("btnReset"),
+
+      togglePrecincts: document.getElementById("togglePrecincts"),
+
+    };
+
+
+
+    // =========================================================
+
+    // Map
+
+    // =========================================================
+
+    const map = L.map("map", { zoomControl: true }).setView(CFG.defaultView.center, CFG.defaultView.zoom);
+
+
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+
+      maxZoom: 19,
+
+      attribution: "&copy; OpenStreetMap",
+
+    }).addTo(map);
+
+
+
+    // =========================================================
+
+    // State / indexes
+
+    // =========================================================
+
+    let precinctLayer = null;
+
+
+
+    // normalized PrecinctID -> { id, layers: [layer...], propsSample }
+
+    const index = new Map();
+
+    let keys = [];
+
+
+
+    let selectedKey = null;
+
+    let selectedLayers = [];
+
+
+
+    // =========================================================
+
+    // Styling
+
+    // =========================================================
+
+    const style = {
+
+      base: () => ({
+
+        color: "#64748b",
+
+        weight: 1,
+
+        opacity: 0.85,
+
+        fillColor: "#3d9bff",
+
+        fillOpacity: 0.06,
+
+      }),
+
+      highlight: () => ({
+
+        color: "#1a66b8",
+
+        weight: 3,
+
+        opacity: 1,
+
+        fillColor: "#3d9bff",
+
+        fillOpacity: 0.18,
+
+      }),
+
+    };
+
+
+
+    // =========================================================
+
+    // Helpers
+
+    // =========================================================
+
+    const norm = (v) => (v ?? "").toString().trim().toUpperCase();
+
+
+
+    function setStatus(msg, tone = "normal") {
+
+      if (!ui.status) return;
+
+      ui.status.textContent = msg;
+
+      ui.status.className = "mt-3 text-sm " + (tone === "error" ? "text-red-700" : "text-slate-600");
+
+    }
+
+
+
+    function setSelection(html) {
+
+      if (ui.selection) ui.selection.innerHTML = html;
+
+    }
+
+
+
+    function safe(v) {
+
+      return v === null || v === undefined || v === "" ? "—" : String(v);
+
+    }
+
+
+
+    function infoHTML(props) {
+
+      const p = props || {};
+
+      return `
+
+        <div class="space-y-1">
+
+          <div>
+
+            <span class="text-xs uppercase tracking-wider text-slate-500">PrecinctID</span>
+
+            <div class="font-mono text-slate-900">${safe(p.PrecinctID)}</div>
+
+          </div>
+
+          <div>
+
+            <span class="text-xs uppercase tracking-wider text-slate-500">CountyID</span>
+
+            <div class="font-mono text-slate-900">${safe(p.CountyID)}</div>
+
+          </div>
+
+        </div>
+
+      `;
+
+      }
+
+
+
+    function hideResults() {
+
+      if (!ui.results) return;
+
+      ui.results.classList.add("hidden");
+
+      ui.results.innerHTML = "";
+
+    }
+
+
+
+    function showResults(ids) {
+
+      if (!ui.results) return;
+
+      if (!ids.length) return hideResults();
+
+
+
+      ui.results.innerHTML = ids
+
+        .map(
+
+          (id) => `
+
+          <button type="button"
+
+            class="w-full px-3 py-2 text-left text-sm hover:bg-slate-50"
+
+            data-pick="${id}">
+
+            <span class="font-mono">${id}</span>
+
+          </button>
+
+        `
+
+        )
+
+        .join("");
+
+
+
+      ui.results.classList.remove("hidden");
+
+
+
+      ui.results.querySelectorAll("[data-pick]").forEach((btn) => {
+
+        btn.addEventListener("click", () => {
+
+          const id = btn.getAttribute("data-pick") || "";
+
+          ui.search.value = id;
+
+          hideResults();
+
+          selectByInput(id);
+
+        });
+
+      });
+
+    }
+
+
+
+    function clearHighlight() {
+
+      selectedKey = null;
+
+
+
+      if (precinctLayer) {
+
+        selectedLayers.forEach((lyr) => {
+
+          try {
+
+            precinctLayer.resetStyle(lyr);
+
+          } catch {}
+
+        });
+
+      }
+
+
+
+      selectedLayers = [];
+
+      map.closePopup();
+
+      setSelection("None selected.");
+
+    }
+
+
+
+    function resetAll() {
+
+      clearHighlight();
+
+      hideResults();
+
+      if (ui.search) ui.search.value = "";
+
+      map.setView(CFG.defaultView.center, CFG.defaultView.zoom);
+
+      setStatus("Ready.");
+
+    }
+
+
+
+    function layersBounds(layers) {
+
+      return L.featureGroup(layers).getBounds();
+
+    }
+
+
+
+    function applyHighlight(key) {
+
+      clearHighlight();
+
+
+
+      const entry = index.get(key);
+
+      if (!entry) return;
+
+
+
+      selectedKey = key;
+
+      selectedLayers = entry.layers;
+
+
+
+      selectedLayers.forEach((lyr) => {
+
+        lyr.setStyle(style.highlight());
+
+        try {
+
+          lyr.bringToFront();
+
+        } catch {}
+
+      });
+
+
+
+      const b = layersBounds(selectedLayers);
+
+      map.fitBounds(b, { padding: CFG.fitPadding });
+
+
+
+      const popupHtml = `
+
+        <div style="min-width: 220px">
+
+          <div style="font-weight:700; margin-bottom:6px;">Precinct</div>
+
+          ${infoHTML(entry.propsSample)}
+
+        </div>
+
+      `;
+
+
+
+      L.popup({ closeButton: true, autoPan: true })
+
+        .setLatLng(b.getCenter())
+
+        .setContent(popupHtml)
+
+        .openOn(map);
+
+
+
+      setSelection(infoHTML(entry.propsSample));
+
+
+
+      const count = entry.layers.length;
+
+      setStatus(count > 1 ? `Selected ${entry.id} (${count} features)` : `Selected ${entry.id}`);
+
+
+
+      // Hook: update precinct report panel if present
+
+      window.UCD_LAST_SELECTED_PRECINCT = entry.id;
+
+      if (window.UCDReports && typeof window.UCDReports.renderForPrecinct === "function") {
+
+        window.UCDReports.renderForPrecinct(entry.id);
+
+      }
+
+    }
+
+
+
+    function selectByInput(raw) {
+
+      const key = norm(raw);
+
+      if (!key) return setStatus("Enter a PrecinctID.", "error");
+
+
+
+      if (!index.has(key)) {
+
+        clearHighlight();
+
+        setStatus(`No precinct found for "${raw}".`, "error");
+
+        setSelection(
+
+          `<span class="text-red-700">No precinct found for <span class="font-mono">${safe(raw)}</span>.</span>`
+
+        );
+
+
+
+        // Clear report if present
+
+        window.UCD_LAST_SELECTED_PRECINCT = "";
+
+        const report = document.getElementById("reportBox");
+
+        if (report) report.innerHTML = "Select a precinct to populate this report.";
+
+
+
+        return;
+
+      }
+
+
+
+      applyHighlight(key);
+
+    }
+
+
+
+    // =========================================================
+
+    // GeoJSON loading + indexing
+
+    // =========================================================
+
+    async function loadPrecincts() {
+
+      setStatus("Loading precinct boundaries…");
+
+
+
+      let geojson;
+
+      try {
+
+        const res = await fetch(CFG.datasetUrl, { cache: "no-store" });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        geojson = await res.json();
+
+      } catch (err) {
+
+        console.error(err);
+
+        setStatus("Failed to load precinct GeoJSON. Check the file path and site build output.", "error");
+
+        return;
+
+      }
+
+
+
+      precinctLayer = L.geoJSON(geojson, {
+
+        style: style.base,
+
+        onEachFeature: (feature, layer) => {
+
+          const props = feature && feature.properties ? feature.properties : {};
+
+          const rawId = props[CFG.searchField];
+
+          const key = norm(rawId);
+
+          if (!key) return;
+
+
+
+          const existing = index.get(key);
+
+          if (!existing) {
+
+            index.set(key, {
+
+              id: String(rawId).trim(),
+
+              layers: [layer],
+
+              propsSample: {
+
+                PrecinctID: props.PrecinctID,
+
+                CountyID: props.CountyID,
+
+              },
+
+            });
+
+          } else {
+
+            existing.layers.push(layer);
+
+          }
+
+
+
+          layer.on("click", () => {
+
+            if (ui.search) ui.search.value = index.get(key)?.id ?? String(rawId);
+
+            hideResults();
+
+            applyHighlight(key);
+
+          });
+
+        },
+
+      });
+
+
+
+      precinctLayer.addTo(map);
+
+      keys = Array.from(index.keys()).sort();
+
+      setStatus(`Ready. Loaded ${keys.length.toLocaleString()} precinct IDs.`);
+
+    }
+
+
+
+    // =========================================================
+
+    // Typeahead
+
+    // =========================================================
+
+    function suggestions(query) {
+
+      const q = norm(query);
+
+      if (!q || q.length < CFG.typeahead.minChars) return [];
+
+
+
+      const out = [];
+
+      for (let i = 0; i < keys.length; i++) {
+
+        const k = keys[i];
+
+        if (k.includes(q)) {
+
+          out.push(index.get(k).id);
+
+          if (out.length >= CFG.typeahead.limit) break;
+
+        }
+
+      }
+
+      return out;
+
+    }
+
+
+
+    if (ui.search) {
+
+      ui.search.addEventListener("input", () => {
+
+        const s = suggestions(ui.search.value || "");
+
+        if (!s.length) return hideResults();
+
+        showResults(s);
+
+      });
+
+
+
+      ui.search.addEventListener("keydown", (e) => {
+
+        if (e.key === "Enter") {
+
+          e.preventDefault();
+
+          hideResults();
+
+          selectByInput(ui.search.value);
+
+        }
+
+        if (e.key === "Escape") hideResults();
+
+      });
+
+    }
+
+
+
+    if (ui.btnGo) {
+
+      ui.btnGo.addEventListener("click", () => {
+
+        hideResults();
+
+        selectByInput(ui.search.value);
+
+      });
+
+    }
+
+
+
+    if (ui.btnReset) {
+
+      ui.btnReset.addEventListener("click", resetAll);
+
+    }
+
+
+
+    document.addEventListener("click", (e) => {
+
+      const within = (ui.results && ui.results.contains(e.target)) || (ui.search && ui.search.contains(e.target));
+
+      if (!within) hideResults();
+
+    });
+
+
+
+    if (ui.togglePrecincts) {
+
+      ui.togglePrecincts.addEventListener("change", () => {
+
+        if (!precinctLayer) return;
+
+        if (ui.togglePrecincts.checked) precinctLayer.addTo(map);
+
+        else map.removeLayer(precinctLayer);
+
+      });
+
+    }
+
+
+
+    // =========================================================
+
+    // Start
+
+    // =========================================================
+
+    resetAll();
+
+    loadPrecincts();
+
+  })();
+
+</script>
+
+<script>
+
+  (function () {
+
+    // =========================
+
+    // Config (add more later)
+
+    // =========================
+
+    const ELECTION_SOURCES = [
+
+      {
+
+        id: "2025-11-04",
+
+        url: "data/to/20251104_utah_county_municipal_general_election.json",
+
+      },
+
+      {
+
+        id: "2025-08-12",
+
+        url: "data/to/20250812_utah_county_municipal_primary_election.json",
+
+      },
+
+    ];
+
+
+
+    // Set to "Utah County" if your files include multiple counties.
+
+    // If your JSON already contains only Utah County, you can set this to null.
+
+    const COUNTY_NAME_FILTER = "Utah County";
+
+
+
+    // Precinct key in the election JSON precinctResults objects (they use .name like "25SR15")
+
+    const PRECINCT_KEY_FIELD = "name";
+
+
+
+    // =========================
+
+    // DOM
+
+    // =========================
+
+    const elSelect = document.getElementById("electionSelect");
+
+    const elReport = document.getElementById("reportBox");
+
+
+
+    // =========================
+
+    // Index structures
+
+    // =========================
+
+    // REPORT_INDEX:
+
+    // Map precinctKey -> Map electionId -> { meta, contests: [...] }
+
+    const REPORT_INDEX = new Map();
+
+
+
+    // Elections metadata (id -> meta)
+
+    const ELECTION_META = new Map();
+
+
+
+    // =========================
+
+    // Helpers
+
+    // =========================
+
+    function normalize(s) {
+
+      return (s ?? "").toString().trim().toUpperCase();
+
+    }
+
+
+
+    function safe(v) {
+
+      return v === null || v === undefined || v === "" ? "—" : String(v);
+
+    }
+
+
+
+    function parseDate(iso) {
+
+      // iso like "2025-11-04"
+
+      try {
+
+        const d = new Date(iso + "T00:00:00");
+
+        return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+
+      } catch {
+
+        return iso;
+
+      }
+
+    }
+
+
+
+    function statusRank(s) {
+
+      // worse = higher number
+
+      const t = (s || "").toLowerCase();
+
+      if (t.includes("not")) return 3;
+
+      if (t.includes("partial")) return 2;
+
+      if (t.includes("report")) return 1; // "Reported"
+
+      return 0;
+
+    }
+
+
+
+    function worstStatus(statuses) {
+
+      if (!statuses.length) return "—";
+
+      let worst = statuses[0];
+
+      for (const s of statuses) {
+
+        if (statusRank(s) > statusRank(worst)) worst = s;
+
+      }
+
+      return worst || "—";
+
+    }
+
+
+
+    function ensurePrecinctElection(precinctKey, electionId, meta) {
+
+      if (!REPORT_INDEX.has(precinctKey)) REPORT_INDEX.set(precinctKey, new Map());
+
+      const perElection = REPORT_INDEX.get(precinctKey);
+
+      if (!perElection.has(electionId)) perElection.set(electionId, { meta, contests: [] });
+
+      return perElection.get(electionId);
+
+    }
+
+
+
+    // =========================
+
+    // Parse election JSON -> index
+
+    // =========================
+
+    function indexElectionJson(data, source) {
+
+      const meta = {
+
+        id: source.id,
+
+        url: source.url,
+
+        electionDate: safe(data.electionDate),
+
+        electionName: safe(data.electionName),
+
+        createdAt: safe(data.createdAt),
+
+      };
+
+      ELECTION_META.set(meta.id, meta);
+
+
+
+      const localResults = Array.isArray(data.localResults) ? data.localResults : [];
+
+
+
+      const counties = COUNTY_NAME_FILTER
+
+        ? localResults.filter((c) => normalize(c.name) === normalize(COUNTY_NAME_FILTER))
+
+        : localResults;
+
+
+
+      // If county filter yields nothing, fall back to all localResults
+
+      const workingCounties = counties.length ? counties : localResults;
+
+
+
+      for (const county of workingCounties) {
+
+        const ballotItems = Array.isArray(county.ballotItems) ? county.ballotItems : [];
+
+
+
+        for (const item of ballotItems) {
+
+          const contestName = safe(item.name);
+
+          const contestId = safe(item.id);
+
+          const voteFor = Number(item.voteFor || 1);
+
+
+
+          const options = Array.isArray(item.ballotOptions) ? item.ballotOptions : [];
+
+          if (!options.length) continue;
+
+
+
+          // Build per-precinct accumulator for this contest
+
+          // Map precinctKey -> { options: [{name, votes, status}], statuses: [] }
+
+          const perPrecinct = new Map();
+
+
+
+          for (const opt of options) {
+
+            const pr = Array.isArray(opt.precinctResults) ? opt.precinctResults : [];
+
+            if (!pr.length) continue;
+
+
+
+            for (const row of pr) {
+
+              const precinctRaw = row && row[PRECINCT_KEY_FIELD];
+
+              const precinctKey = normalize(precinctRaw);
+
+              if (!precinctKey) continue;
+
+
+
+              if (!perPrecinct.has(precinctKey)) {
+
+                perPrecinct.set(precinctKey, { options: [], statuses: [] });
+
+              }
+
+              const acc = perPrecinct.get(precinctKey);
+
+
+
+              const rc = Number(row.voteCount || 0);
+
+              const rs = safe(row.reportingStatus);
+
+
+
+              acc.options.push({
+
+                candidateId: safe(opt.id),
+
+                candidateName: safe(opt.name),
+
+                votes: rc,
+
+                reportingStatus: rs,
+
+              });
+
+              acc.statuses.push(rs);
+
+            }
+
+          }
+
+
+
+          // Commit contest for each precinct where we found results
+
+          for (const [precinctKey, acc] of perPrecinct.entries()) {
+
+            const totalVotes = acc.options.reduce((s, o) => s + (Number(o.votes) || 0), 0);
+
+            const contestStatus = worstStatus(acc.statuses);
+
+
+
+            const bucket = ensurePrecinctElection(precinctKey, meta.id, meta);
+
+            bucket.contests.push({
+
+              contestId,
+
+              contestName,
+
+              voteFor,
+
+              totalVotes,
+
+              reportingStatus: contestStatus,
+
+              options: acc.options.sort((a, b) => (b.votes || 0) - (a.votes || 0)),
+
+            });
+
+          }
+
+        }
+
+      }
+
+    }
+
+
+
+    // =========================
+
+    // Render
+
+    // =========================
+
+    function renderForPrecinct(precinctIdRaw) {
+
+      const precinctKey = normalize(precinctIdRaw);
+
+      if (!precinctKey) return;
+
+
+
+      if (!REPORT_INDEX.has(precinctKey)) {
+
+        elReport.innerHTML =
+
+          `<div class="text-slate-700">No election results found for <span class="font-mono">${safe(precinctIdRaw)}</span> ` +
+
+          `in the loaded JSON files.</div>`;
+
+        return;
+
+      }
+
+
+
+      const perElection = REPORT_INDEX.get(precinctKey);
+
+
+
+      // pick election from dropdown (or first available)
+
+      let electionId = elSelect && elSelect.value ? elSelect.value : "";
+
+      if (!electionId || !perElection.has(electionId)) {
+
+        electionId = Array.from(perElection.keys()).sort().reverse()[0];
+
+        if (elSelect) elSelect.value = electionId;
+
+      }
+
+
+
+      const pack = perElection.get(electionId);
+
+      const meta = pack.meta;
+
+
+
+      // sort contests by name (or keep input order)
+
+      const contests = pack.contests.slice();
+
+
+
+      // Ballots-cast proxy: max totalVotes among voteFor == 1 contests
+
+      const singleSeat = contests.filter((c) => c.voteFor === 1);
+
+      const ballotsProxy = singleSeat.length
+
+        ? Math.max(...singleSeat.map((c) => c.totalVotes || 0))
+
+        : null;
+
+
+
+      const header = `
+
+        <div class="mb-3">
+
+          <div class="text-sm font-semibold text-slate-900">${safe(meta.electionName)}</div>
+
+          <div class="text-xs text-slate-600">${parseDate(meta.electionDate)} · Precinct <span class="font-mono">${safe(precinctIdRaw)}</span></div>
+
+        </div>
+
+      `;
+
+
+
+      const summary = `
+
+        <div class="grid gap-2 sm:grid-cols-3 mb-4">
+
+          <div class="rounded-md bg-white p-3 border border-slate-200">
+
+            <div class="text-xs uppercase tracking-wider text-slate-500">Contests</div>
+
+            <div class="text-lg font-semibold text-slate-900">${contests.length.toLocaleString()}</div>
+
+          </div>
+
+          <div class="rounded-md bg-white p-3 border border-slate-200">
+
+            <div class="text-xs uppercase tracking-wider text-slate-500">Ballots proxy</div>
+
+            <div class="text-lg font-semibold text-slate-900">${ballotsProxy === null ? "—" : ballotsProxy.toLocaleString()}</div>
+
+            <div class="text-[11px] text-slate-500 mt-1">Max votes in vote-for-1 contest (not official turnout)</div>
+
+          </div>
+
+          <div class="rounded-md bg-white p-3 border border-slate-200">
+
+            <div class="text-xs uppercase tracking-wider text-slate-500">Data source</div>
+
+            <div class="text-sm font-semibold text-slate-900">JSON</div>
+
+            <div class="text-[11px] text-slate-500 mt-1">${safe(meta.createdAt)}</div>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+
+      const contestBlocks = contests
+
+        .map((c) => {
+
+          const rows = c.options
+
+            .map(
+
+              (o) => `
+
+              <tr class="border-t border-slate-100">
+
+                <td class="py-2 pr-3 text-slate-900">${safe(o.candidateName)}</td>
+
+                <td class="py-2 pr-3 text-right font-mono text-slate-900">${Number(o.votes || 0).toLocaleString()}</td>
+
+                <td class="py-2 text-right text-xs text-slate-500">${safe(o.reportingStatus)}</td>
+
+              </tr>
+
+            `
+
+            )
+
+            .join("");
+
+
+
+          return `
+
+            <details class="rounded-md border border-slate-200 bg-white">
+
+              <summary class="cursor-pointer select-none px-3 py-3 flex items-start justify-between gap-3">
+
+                <div class="min-w-0">
+
+                  <div class="text-sm font-semibold text-slate-900 leading-tight">${safe(c.contestName)}</div>
+
+                  <div class="mt-0.5 text-xs text-slate-600">
+
+                    voteFor: ${safe(c.voteFor)} · total votes: <span class="font-mono">${Number(c.totalVotes || 0).toLocaleString()}</span>
+
+                  </div>
+
+                </div>
+
+                <div class="shrink-0 text-xs font-semibold text-slate-600">${safe(c.reportingStatus)}</div>
+
+              </summary>
+
+
+
+              <div class="px-3 pb-3">
+
+                <table class="w-full text-sm">
+
+                  <thead>
+
+                    <tr class="text-xs uppercase tracking-wider text-slate-500">
+
+                      <th class="py-2 text-left font-semibold">Option</th>
+
+                      <th class="py-2 text-right font-semibold">Votes</th>
+
+                      <th class="py-2 text-right font-semibold">Status</th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody>${rows}</tbody>
+
+                </table>
+
+              </div>
+
+            </details>
+
+          `;
+
+        })
+
+        .join('<div class="h-3"></div>');
+
+
+
+      elReport.innerHTML = header + summary + contestBlocks;
+
+    }
+
+
+
+    // =========================
+
+    // Load elections
+
+    // =========================
+
+    async function loadAll() {
+
+      if (!elSelect || !elReport) return;
+
+
+
+      elSelect.innerHTML = `<option value="">Loading…</option>`;
+
+
+
+      const loads = await Promise.allSettled(
+
+        ELECTION_SOURCES.map(async (src) => {
+
+          const res = await fetch(src.url, { cache: "no-store" });
+
+          if (!res.ok) throw new Error(`Failed ${src.url}: HTTP ${res.status}`);
+
+          const data = await res.json();
+
+          indexElectionJson(data, src);
+
+          return src.id;
+
+        })
+
+      );
+
+
+
+      const okIds = loads
+
+        .filter((r) => r.status === "fulfilled")
+
+        .map((r) => r.value)
+
+        .sort()
+
+        .reverse();
+
+
+
+      if (!okIds.length) {
+
+        elSelect.innerHTML = `<option value="">No data</option>`;
+
+        elReport.innerHTML =
+
+          `<div class="text-red-700">Could not load election JSON files. Check that they exist in the built site output.</div>`;
+
+        return;
+
+      }
+
+
+
+      elSelect.innerHTML = okIds
+
+        .map((id) => {
+
+          const m = ELECTION_META.get(id);
+
+          const label = m ? `${parseDate(m.electionDate)} · ${m.electionName}` : id;
+
+          return `<option value="${id}">${label}</option>`;
+
+        })
+
+        .join("");
+
+
+
+      // Change election selection -> re-render if a precinct is selected
+
+      elSelect.addEventListener("change", () => {
+
+        const last = window.UCD_LAST_SELECTED_PRECINCT || "";
+
+        if (last) renderForPrecinct(last);
+
+      });
+
+
+
+      // If map already selected something before data finished loading
+
+      const last = window.UCD_LAST_SELECTED_PRECINCT || "";
+
+      if (last) renderForPrecinct(last);
+
+      else elReport.innerHTML = "Select a precinct to populate this report.";
+
+    }
+
+
+
+    // expose API for the map script
+
+    window.UCDReports = { renderForPrecinct };
+
+
+
+    loadAll();
+
+  })();
+
+</script>
+
+
+
+
+
+</body></html>
