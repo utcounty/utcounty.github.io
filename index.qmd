@@ -17,11 +17,14 @@ format:
 ---
 
 ::: {.column-screen}
+
 ```{=html}
-<main>
-  {{< include html_chunks/sections/hero.html >}}
-  {{< include html_chunks/sections/tools.html >}}
-  {{< include html_chunks/sections/about.html >}}
-  {{< include html_chunks/footer.html >}}
-</main>
+
+{{< include html_chunks/sections/hero.html >}}
+{{< include html_chunks/sections/action.html >}}
+{{< include html_chunks/sections/register.html >}}
+
+{{< include html_chunks/footer.html >}}
+
 ```
+:::

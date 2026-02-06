@@ -7,7 +7,7 @@ project:
 
 
 website:
-  title: "Utah County Democrats"
+  title: "Utah County Political Data"
   favicon: images\favicon.png
   description: "Utah County Data for Progress"
   site-url: "https://ajaverett.com" 

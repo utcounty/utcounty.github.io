@@ -1,8 +1,527 @@
-<html xmlns="http://www.w3.org/1999/xhtml">    
-  <head>      
-    <title>Redirect to about.html</title>      
-    <meta http-equiv="refresh" content="0;URL='about.html'" />    
-  </head>    
-  <body> 
-  </body>  
-</html>     
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Utah County Data for Progress – Utah County Political Data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<link href="./images/favicon.png" rel="icon" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+
+
+
+<script>
+
+  tailwind.config = {
+
+    theme: {
+
+      extend: {
+
+        colors: {
+
+          brand: {
+
+            50: "#f2f9ff",
+
+            100: "#e6f3ff",
+
+            200: "#cfe8ff",
+
+            300: "#a7d4ff",
+
+            400: "#73b8ff",
+
+            500: "#3d9bff",
+
+            600: "#1f7fe8",
+
+            700: "#1a66b8",
+
+            800: "#194f8a",
+
+            900: "#173f6a",
+
+          },
+
+        },
+
+      },
+
+    },
+
+  };
+
+</script>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    document.body.classList.add("min-h-screen", "bg-white", "text-slate-900");
+
+  });
+
+</script>
+
+
+
+<link rel="stylesheet" href="styles/styles.css">
+<meta property="og:title" content="Utah County Data for Progress – Utah County Political Data">
+<meta property="og:site_name" content="Utah County Political Data">
+<meta name="twitter:title" content="Utah County Data for Progress – Utah County Political Data">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body>
+
+<header class="ucd-masthead">
+
+  <div class="ucd-rule ucd-rule--top" aria-hidden="true"></div>
+
+
+
+  <div class="ucd-masthead-inner">
+
+    <a class="ucd-wordmark" href="./index.html">
+
+      Utah County Political Data
+
+    </a>
+
+
+
+    <br>
+
+
+
+    <nav class="ucd-nav" aria-label="Primary">
+
+      <a class="ucd-navlink" href="./blog.html" data-nav="blog">Blog</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="./maps.html" data-nav="maps">Maps</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="./about.html" data-nav="about">About</a>
+
+    </nav>
+
+  </div>
+
+
+
+  <div class="ucd-rule ucd-rule--bottom" aria-hidden="true"></div>
+
+</header>
+
+
+<header id="title-block-header">
+<h1 class="title">Utah County Data for Progress</h1>
+
+</header>
+
+
+<div class="column-screen">
+
+<section class="relative isolate w-full">
+  <!-- Hero background image -->
+  <div class="relative min-h-[720px] sm:min-h-[680px] w-full overflow-hidden">
+    <img src="images/index/utah-hero.jpg" alt="Utah landscape" class="absolute inset-0 h-full w-full object-cover object-center" loading="lazy" decoding="async">
+
+    <!-- Overlays -->
+    <div class="absolute inset-0 bg-slate-950/65"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/15 to-slate-950/40"></div>
+    <div class="absolute inset-0 bg-[rgba(61,155,255,0.16)]"></div>
+
+    <!-- Content -->
+    <div class="relative mx-auto max-w-6xl px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-14">
+      <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
+        <!-- Left headline -->
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/90 ring-1 ring-white/15 backdrop-blur">
+            Utah County · Data + Strategy
+          </div>
+
+          <!-- Mobile-first type scale -->
+          <h1 class="mt-5 text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+            Data for Progress,
+            <span class="block">Utah County.</span>
+          </h1>
+
+          <p class="mt-3 max-w-xl text-sm sm:text-lg leading-relaxed text-white/80">
+            Maps, precinct-level election results, and lightweight tools for local organizing.
+          </p>
+
+          <!-- Mobile-friendly buttons: full width on mobile -->
+          <div class="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+            <a href="./blog.html" class="inline-flex w-full sm:w-auto items-center justify-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+              Read updates
+            </a>
+
+            <a href="./maps.html" class="inline-flex w-full sm:w-auto items-center justify-center rounded-lg bg-[rgba(61,155,255,0.92)] px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[rgba(61,155,255,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950">
+              Open maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Right resources card -->
+        <div class="lg:col-span-5">
+          <!-- Make card readable on top of image on mobile -->
+          <div class="rounded-2xl bg-white/95 p-5 sm:p-6 shadow-xl ring-1 ring-black/5 backdrop-blur">
+            <div class="text-lg sm:text-xl font-bold text-slate-900">Resources in Utah County</div>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">
+              Official links, local organizations, platforms, and ways to get involved.
+            </p>
+
+            <div class="mt-5 space-y-5">
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Utah County</div>
+                <div class="mt-2 grid gap-2">
+                  <!-- Bigger tap target + clearer affordance -->
+                  <a class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400" href="https://www.utcountydems.com/" target="_blank" rel="noopener noreferrer">
+                    <span>Utah County Democrats</span>
+                    <span aria-hidden="true" class="text-slate-400">↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Utah State</div>
+                <div class="mt-2 grid gap-2">
+                  <a class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400" href="https://www.utahdemocrats.org/" target="_blank" rel="noopener noreferrer">
+                    <span>Utah Democratic Party</span>
+                    <span aria-hidden="true" class="text-slate-400">↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Follow</div>
+
+                <!-- Mobile-friendly: larger buttons, wrap if needed -->
+                <div class="mt-3 flex flex-wrap items-center gap-3">
+                  <!-- X / Twitter -->
+                  <a href="https://x.com/utcountydems" target="_blank" rel="noopener noreferrer" class="group inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400" aria-label="Utah County Democrats on X" title="X">
+                    <svg class="h-5 w-5 text-slate-700 group-hover:text-slate-900" viewbox="0 0 24 24" aria-hidden="true">
+                      <path fill="currentColor" d="M18.9 2H22l-6.8 7.8L23 22h-6.5l-5.1-6.6L5.6 22H2.5l7.3-8.4L1 2h6.7l4.6 6L18.9 2Zm-1.1 18h1.7L6.8 3.9H5L17.8 20Z"></path>
+                    </svg>
+                  </a>
+
+                  <!-- Instagram -->
+                  <a href="https://www.instagram.com/utcountydems/" target="_blank" rel="noopener noreferrer" class="group inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400" aria-label="Utah County Democrats on Instagram" title="Instagram">
+                    <svg class="h-5 w-5 text-slate-700 group-hover:text-slate-900" viewbox="0 0 24 24" aria-hidden="true">
+                      <path fill="currentColor" d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4A5.8 5.8 0 0 1 16.2 22H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4A3.8 3.8 0 0 0 20 16.2V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm10.7 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"></path>
+                    </svg>
+                  </a>
+
+                  <!-- Facebook -->
+                  <a href="https://www.facebook.com/utahcountydems/" target="_blank" rel="noopener noreferrer" class="group inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400" aria-label="Utah County Democrats on Facebook" title="Facebook">
+                    <svg class="h-5 w-5 text-slate-700 group-hover:text-slate-900" viewbox="0 0 24 24" aria-hidden="true">
+                      <path fill="currentColor" d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.4-.1-2.7-.1-2.7 0-4.5 1.6-4.5 4.6V11H7v3h2.5v8h4Z"></path>
+                    </svg>
+                  </a>
+                </div>
+
+                <div class="mt-2 text-xs text-slate-500">
+                  Follow Utah County Democrats on social media.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /card -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <!-- light banner -->
+    <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-brand-50 p-10">
+      <div class="absolute inset-0 bg-[rgba(61,155,255,0.08)]"></div>
+      <div class="relative text-center">
+        <h2 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">Take Action</h2>
+        <p class="mx-auto mt-3 max-w-2xl text-sm text-slate-700 sm:text-base">
+          Use the maps, scan results, and share quick field notes so we’re not reinventing the wheel.
+        </p>
+        <div class="mt-6">
+          <a href="./maps.html" class="inline-flex items-center justify-center rounded-lg bg-[rgba(61,155,255,0.95)] px-6 py-3 text-sm font-semibold text-white hover:bg-[rgba(61,155,255,1)]">
+            Visit the Maps →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- two action tiles -->
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      <div class="rounded-2xl bg-slate-900 p-8 text-white shadow-sm">
+        <div class="text-3xl font-extrabold">Blog</div>
+        <p class="mt-3 text-sm text-white/80">
+          Updates, notes, and small write-ups. Fast to read, easy to search.
+        </p>
+        <div class="mt-7">
+          <a href="./blog.html" class="inline-flex w-full items-center justify-center rounded-lg bg-[rgba(61,155,255,0.85)] px-5 py-3 text-sm font-semibold text-white hover:bg-[rgba(61,155,255,1)]">
+            Read the blog
+          </a>
+        </div>
+      </div>
+
+      <div class="rounded-2xl bg-slate-900 p-8 text-white shadow-sm">
+        <div class="text-3xl font-extrabold">Share</div>
+        <p class="mt-3 text-sm text-white/80">
+          Got a dataset, a link, or a quick “here’s what worked”? Add it.
+        </p>
+        <div class="mt-7 grid gap-3 sm:grid-cols-2">
+          <a href="./about.html" class="inline-flex items-center justify-center rounded-lg bg-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/15">
+            Contact
+          </a>
+          <a href="./blog.html" class="inline-flex items-center justify-center rounded-lg bg-[rgba(61,155,255,0.85)] px-5 py-3 text-sm font-semibold text-white hover:bg-[rgba(61,155,255,1)]">
+            Post an update
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-slate-900">
+  <div class="mx-auto max-w-6xl px-4 py-14">
+    <div class="grid items-center gap-10 lg:grid-cols-12">
+      <!-- left copy -->
+      <div class="lg:col-span-6">
+        <h2 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+          Are you registered to vote?
+        </h2>
+
+        <p class="mt-5 max-w-xl text-sm text-white/80 sm:text-base">
+          Voter registration and ballot status checks are worth doing early. This site is about data and organizing, but it all starts with votes actually getting counted.
+        </p>
+
+        <div class="mt-8">
+          <!-- Replace href with the exact link you prefer -->
+          <a href="https://secure.utah.gov/voterreg/index.html" class="inline-flex w-full items-center justify-center rounded-lg bg-[rgba(61,155,255,0.95)] px-6 py-3 text-sm font-semibold text-white hover:bg-[rgba(61,155,255,1)] sm:w-auto">
+            Register to Vote
+          </a>
+        </div>
+      </div>
+
+      <!-- right image -->
+      <div class="lg:col-span-6">
+        <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+          <!-- Replace this image with something local / organizing related -->
+          <img src="images/index/register.png" alt="Community photo" class="h-[320px] w-full object-cover object-center">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="border-t border-slate-200">
+  <div class="mx-auto max-w-5xl px-4 py-6 text-sm text-slate-600">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div>© <span id="year"></span> Utah County Political Data</div>
+
+      <div class="flex gap-4">
+        <a href="./blog.html" class="hover:text-slate-900">Blog</a>
+        <a href="#tools" class="hover:text-slate-900">Tools</a>
+        <a href="#about" class="hover:text-slate-900">About</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+</div>
+
+
+<script>
+
+  (function () {
+
+    // Mark active nav item based on current page path (and hash for in-page anchors)
+
+    const path = (window.location.pathname || "").toLowerCase();
+
+    const hash = (window.location.hash || "").toLowerCase();
+
+    const links = document.querySelectorAll(".ucd-navlink[data-nav]");
+
+
+
+    // Decide which nav key should be active
+
+    let activeKey = "";
+
+
+
+    const isBlog = path.endsWith("/blog.html") || path.endsWith("blog.html");
+
+    const isMaps = path.endsWith("/maps.html") || path.endsWith("maps.html");
+
+    const isAbout = path.endsWith("/about.html") || path.endsWith("about.html");
+
+    const isHome = path.endsWith("/index.html") || path.endsWith("index.html") || path.endsWith("/");
+
+
+
+    if (isBlog) {
+
+      activeKey = "blog";
+
+    } else if (isMaps) {
+
+      activeKey = "maps";
+
+    } else if (isAbout) {
+
+      activeKey = "about";
+
+    } else if (isHome) {
+
+      // Home page uses anchors for sections
+
+      if (hash === "#maps") activeKey = "maps";
+
+      else if (hash === "#about") activeKey = "about";
+
+      else activeKey = ""; // no underline on home by default
+
+    }
+
+
+
+    links.forEach((a) => {
+
+      const key = (a.getAttribute("data-nav") || "").toLowerCase();
+
+      if (key && key === activeKey) {
+
+        a.setAttribute("aria-current", "page");
+
+      } else {
+
+        a.removeAttribute("aria-current");
+
+      }
+
+    });
+
+  })();
+
+</script>
+
+<script>
+
+  (function () {
+
+    const yearEl = document.getElementById("year");
+
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  })();
+
+</script>
+
+<style>
+
+  #title-block-header {
+
+    display: none !important;
+
+  }
+
+
+
+  /* If Quarto toggles the "no matching items" element on/off,
+
+     just hide it permanently. */
+
+  .listing-no-matching,
+
+  .listing-no-matching.d-none {
+
+    display: none !important;
+
+  }
+
+</style>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    // Your hero title/subtitle injector
+
+    const settings = document.getElementById("hero-settings");
+
+
+
+    if (settings) {
+
+      const titleText = settings.getAttribute("data-title");
+
+      const subtitleText = settings.getAttribute("data-subtitle");
+
+
+
+      const titleEl = document.getElementById("hero-title");
+
+      const subtitleEl = document.getElementById("hero-subtitle");
+
+
+
+      if (titleEl && titleText) titleEl.innerText = titleText;
+
+      if (subtitleEl && subtitleText) subtitleEl.innerText = subtitleText;
+
+
+
+      settings.remove();
+
+    }
+
+
+
+    // Remove "No matching items" block if it exists
+
+    const noMatching = document.querySelector(".listing-no-matching");
+
+    if (noMatching) noMatching.remove();
+
+  });
+
+</script>
+
+
+
+
+
+</body></html>

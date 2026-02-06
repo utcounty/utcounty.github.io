@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>Utah County Democrats</title>
+<title>Utah County Political Data</title>
 <link>https://ajaverett.com/blog.html</link>
 <atom:link href="https://ajaverett.com/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Utah County Data for Progress</description>

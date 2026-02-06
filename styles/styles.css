@@ -110,19 +110,44 @@ img {
   border-radius: 9999px;
 }
 
-/* Mobile: slightly tighter masthead */
-@media (max-width: 480px) {
-  .ucd-masthead-inner {
-    padding: 1.4rem 1rem 1rem 1rem;
+/* Mobile: tighter masthead + remove outer rules + smaller title */
+@media (max-width: 640px) {
+  .ucd-rule {
+    display: none; /* removes the top/bottom horizontal hairlines */
   }
+
+  .ucd-masthead-inner {
+    padding: 1.1rem 1rem 0.9rem 1rem;
+  }
+
+  .ucd-wordmark {
+    font-size: 1.15rem; /* smaller title on mobile */
+    line-height: 1.2;
+  }
+
   .ucd-dek {
     font-size: 0.9rem;
   }
+
+  .ucd-nav {
+    margin-top: 0.75rem;
+    padding-top: 0.6rem;
+  }
+
   .ucd-navlink {
     font-size: 0.78rem;
     letter-spacing: 0.12em;
+    padding: 0.45rem 0.35rem; /* slightly bigger tap target */
   }
 }
+
+/* Extra-small phones: a touch smaller still */
+@media (max-width: 360px) {
+  .ucd-wordmark {
+    font-size: 1.05rem;
+  }
+}
+
 
 /* =========================
    MAPS PAGE SMALL POLISH

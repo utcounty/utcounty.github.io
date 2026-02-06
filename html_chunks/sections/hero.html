@@ -1,27 +1,163 @@
-<section class="bg-brand-50">
-  <div class="mx-auto max-w-5xl px-4 py-12">
-    <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">
-      Utah County Data for Progress
-    </h1>
+<section class="relative isolate w-full">
+  <!-- Hero background image -->
+  <div class="relative min-h-[720px] sm:min-h-[680px] w-full overflow-hidden">
+    <img
+      src="images/index/utah-hero.jpg"
+      alt="Utah landscape"
+      class="absolute inset-0 h-full w-full object-cover object-center"
+      loading="lazy"
+      decoding="async"
+    />
 
-    <p class="mt-3 max-w-2xl text-base text-slate-700">
-      A simple home for shared insights and practical links for organizing, messaging, and turnout.
-    </p>
+    <!-- Overlays -->
+    <div class="absolute inset-0 bg-slate-950/65"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-950/15 to-slate-950/40"></div>
+    <div class="absolute inset-0 bg-[rgba(61,155,255,0.16)]"></div>
 
-    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-      <a
-        href="./blog.html"
-        class="inline-flex items-center justify-center rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white hover:bg-brand-700"
-      >
-        Go to the blog
-      </a>
+    <!-- Content -->
+    <div class="relative mx-auto max-w-6xl px-4 sm:px-6 pt-12 sm:pt-16 pb-10 sm:pb-14">
+      <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
+        <!-- Left headline -->
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-white/90 ring-1 ring-white/15 backdrop-blur">
+            Utah County · Data + Strategy
+          </div>
 
-      <a
-        href="#tools"
-        class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
-      >
-        View tools
-      </a>
+          <!-- Mobile-first type scale -->
+          <h1 class="mt-5 text-3xl sm:text-5xl font-extrabold tracking-tight text-white">
+            Data for Progress,
+            <span class="block">Utah County.</span>
+          </h1>
+
+          <p class="mt-3 max-w-xl text-sm sm:text-lg leading-relaxed text-white/80">
+            Maps, precinct-level election results, and lightweight tools for local organizing.
+          </p>
+
+          <!-- Mobile-friendly buttons: full width on mobile -->
+          <div class="mt-6 grid gap-3 sm:flex sm:flex-wrap">
+            <a
+              href="./blog.html"
+              class="inline-flex w-full sm:w-auto items-center justify-center rounded-lg bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            >
+              Read updates
+            </a>
+
+            <a
+              href="./maps.html"
+              class="inline-flex w-full sm:w-auto items-center justify-center rounded-lg bg-[rgba(61,155,255,0.92)] px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[rgba(61,155,255,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+            >
+              Open maps
+            </a>
+          </div>
+        </div>
+
+        <!-- Right resources card -->
+        <div class="lg:col-span-5">
+          <!-- Make card readable on top of image on mobile -->
+          <div class="rounded-2xl bg-white/95 p-5 sm:p-6 shadow-xl ring-1 ring-black/5 backdrop-blur">
+            <div class="text-lg sm:text-xl font-bold text-slate-900">Resources in Utah County</div>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">
+              Official links, local organizations, platforms, and ways to get involved.
+            </p>
+
+            <div class="mt-5 space-y-5">
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Utah County</div>
+                <div class="mt-2 grid gap-2">
+                  <!-- Bigger tap target + clearer affordance -->
+                  <a
+                    class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                    href="https://www.utcountydems.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>Utah County Democrats</span>
+                    <span aria-hidden="true" class="text-slate-400">↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Utah State</div>
+                <div class="mt-2 grid gap-2">
+                  <a
+                    class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                    href="https://www.utahdemocrats.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>Utah Democratic Party</span>
+                    <span aria-hidden="true" class="text-slate-400">↗</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <div class="text-xs font-semibold uppercase tracking-wider text-slate-500">Follow</div>
+
+                <!-- Mobile-friendly: larger buttons, wrap if needed -->
+                <div class="mt-3 flex flex-wrap items-center gap-3">
+                  <!-- X / Twitter -->
+                  <a
+                    href="https://x.com/utcountydems"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                    aria-label="Utah County Democrats on X"
+                    title="X"
+                  >
+                    <svg class="h-5 w-5 text-slate-700 group-hover:text-slate-900" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M18.9 2H22l-6.8 7.8L23 22h-6.5l-5.1-6.6L5.6 22H2.5l7.3-8.4L1 2h6.7l4.6 6L18.9 2Zm-1.1 18h1.7L6.8 3.9H5L17.8 20Z"
+                      />
+                    </svg>
+                  </a>
+
+                  <!-- Instagram -->
+                  <a
+                    href="https://www.instagram.com/utcountydems/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                    aria-label="Utah County Democrats on Instagram"
+                    title="Instagram"
+                  >
+                    <svg class="h-5 w-5 text-slate-700 group-hover:text-slate-900" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M7.8 2h8.4A5.8 5.8 0 0 1 22 7.8v8.4A5.8 5.8 0 0 1 16.2 22H7.8A5.8 5.8 0 0 1 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2Zm0 2A3.8 3.8 0 0 0 4 7.8v8.4A3.8 3.8 0 0 0 7.8 20h8.4A3.8 3.8 0 0 0 20 16.2V7.8A3.8 3.8 0 0 0 16.2 4H7.8Zm10.7 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"
+                      />
+                    </svg>
+                  </a>
+
+                  <!-- Facebook -->
+                  <a
+                    href="https://www.facebook.com/utahcountydems/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                    aria-label="Utah County Democrats on Facebook"
+                    title="Facebook"
+                  >
+                    <svg class="h-5 w-5 text-slate-700 group-hover:text-slate-900" viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6h1.6V4.8c-.3 0-1.4-.1-2.7-.1-2.7 0-4.5 1.6-4.5 4.6V11H7v3h2.5v8h4Z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+
+                <div class="mt-2 text-xs text-slate-500">
+                  Follow Utah County Democrats on social media.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /card -->
+        </div>
+      </div>
     </div>
   </div>
 </section>

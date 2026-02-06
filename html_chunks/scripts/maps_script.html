@@ -28,7 +28,12 @@
     // =========================================================
     // Map
     // =========================================================
-    const map = L.map("map", { zoomControl: true }).setView(CFG.defaultView.center, CFG.defaultView.zoom);
+    const map = L.map("map", { zoomControl: true, scrollWheelZoom: false })
+      .setView(CFG.defaultView.center, CFG.defaultView.zoom);
+
+    // Only enable scroll-wheel zoom when the map is "active"
+    map.on("focus", () => map.scrollWheelZoom.enable());
+    map.on("blur", () => map.scrollWheelZoom.disable());
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -115,14 +120,21 @@
       ui.results.innerHTML = ids
         .map(
           (id) => `
-          <button type="button"
-            class="w-full px-3 py-2 text-left text-sm hover:bg-slate-50"
-            data-pick="${id}">
-            <span class="font-mono">${id}</span>
-          </button>
-        `
+            <button
+              type="button"
+              class="w-full px-4 py-3 text-left text-base sm:text-sm hover:bg-slate-50 active:bg-slate-100"
+              data-pick="${id}"
+            >
+              <span class="font-mono">${id}</span>
+            </button>
+          `
         )
         .join("");
+
+      // Mobile: keep dropdown usable and on-screen
+      ui.results.style.maxHeight = "240px";
+      ui.results.style.overflowY = "auto";
+      ui.results.style.webkitOverflowScrolling = "touch";
 
       ui.results.classList.remove("hidden");
 
@@ -135,6 +147,7 @@
         });
       });
     }
+
 
     function clearHighlight() {
       selectedKey = null;

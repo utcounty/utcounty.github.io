@@ -1,17 +1,10 @@
 [
   {
-    "objectID": "data/geo/sources.html",
-    "href": "data/geo/sources.html",
-    "title": "Data Sources",
+    "objectID": "blog/metric.html",
+    "href": "blog/metric.html",
+    "title": "Quick Metric: Contact → Show Rate",
     "section": "",
-    "text": "Statewide ballot area polygons were downloaded from Utah’s Open Data Portal:\n\nDataset: Utah VISTA Ballot Areas\nURL: https://opendata.gis.utah.gov/datasets/utah::utah-vista-ballot-areas/about\nOriginal file: VistaBallotAreas_-1176372527926423573.geojson\n\nProcessing: * Load the statewide GeoJSON * Filter to Utah County using CountyID == 25: * Keep only required fields: ['CountyID', 'PrecinctID', 'SubPrecinctID', 'geometry'] * Reproject for web mapping: WGS84 (EPSG:4326) * Lightly simplify geometry for performance: tolerance = 0.0001\nOutput: data/geo/utah_county_precincts.min.geojson"
-  },
-  {
-    "objectID": "data/geo/sources.html#utah-county-precinct-boundaries",
-    "href": "data/geo/sources.html#utah-county-precinct-boundaries",
-    "title": "Data Sources",
-    "section": "",
-    "text": "Statewide ballot area polygons were downloaded from Utah’s Open Data Portal:\n\nDataset: Utah VISTA Ballot Areas\nURL: https://opendata.gis.utah.gov/datasets/utah::utah-vista-ballot-areas/about\nOriginal file: VistaBallotAreas_-1176372527926423573.geojson\n\nProcessing: * Load the statewide GeoJSON * Filter to Utah County using CountyID == 25: * Keep only required fields: ['CountyID', 'PrecinctID', 'SubPrecinctID', 'geometry'] * Reproject for web mapping: WGS84 (EPSG:4326) * Lightly simplify geometry for performance: tolerance = 0.0001\nOutput: data/geo/utah_county_precincts.min.geojson"
+    "text": "A simple weekly check: how many scheduled voters actually show up (events, canvass shifts, trainings).\nIf the show rate drops, try: - confirm the day before - send a map + time estimate - offer a buddy option (bring a friend)"
   },
   {
     "objectID": "blog/welcome.html",
@@ -19,13 +12,6 @@
     "title": "Welcome: What This Blog Is For",
     "section": "",
     "text": "This is a lightweight place to share Utah County–specific political data and practical strategy.\n\nKeep posts short\nLink sources when you can\nEnd with one clear takeaway"
-  },
-  {
-    "objectID": "blog/metric.html",
-    "href": "blog/metric.html",
-    "title": "Quick Metric: Contact → Show Rate",
-    "section": "",
-    "text": "A simple weekly check: how many scheduled voters actually show up (events, canvass shifts, trainings).\nIf the show rate drops, try: - confirm the day before - send a map + time estimate - offer a buddy option (bring a friend)"
   },
   {
     "objectID": "data/sources.html",
