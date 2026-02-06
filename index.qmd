@@ -10,6 +10,7 @@ format:
       - html_chunks/scripts/tailwind_head.html
     include-before-body:
       - html_chunks/menu.html
+      - html_chunks/announcement.html
     include-after-body:
       - html_chunks/scripts/menu_script.html
       - html_chunks/scripts/index_script.html

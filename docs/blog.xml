@@ -6,14 +6,14 @@
       version="2.0">
 <channel>
 <title>Utah County Political Data</title>
-<link>https://ajaverett.com/blog.html</link>
-<atom:link href="https://ajaverett.com/blog.xml" rel="self" type="application/rss+xml"/>
+<link>https://utcounty.github.io/blog.html</link>
+<atom:link href="https://utcounty.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Utah County Data for Progress</description>
 <generator>quarto-1.6.40</generator>
 <lastBuildDate>Wed, 04 Feb 2026 07:00:00 GMT</lastBuildDate>
 <item>
   <title>Welcome: What This Blog Is For</title>
-  <link>https://ajaverett.com/blog/welcome.html</link>
+  <link>https://utcounty.github.io/blog/welcome.html</link>
   <description><![CDATA[ 
 
 
@@ -31,13 +31,13 @@
  ]]></description>
   <category>cloud</category>
   <category>updates</category>
-  <guid>https://ajaverett.com/blog/welcome.html</guid>
+  <guid>https://utcounty.github.io/blog/welcome.html</guid>
   <pubDate>Wed, 04 Feb 2026 07:00:00 GMT</pubDate>
-  <media:content url="https://ajaverett.com/blog/images/DONKEYYYY.jpg" medium="image" type="image/jpeg"/>
+  <media:content url="https://utcounty.github.io/blog/images/DONKEYYYY.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>Quick Metric: Contact → Show Rate</title>
-  <link>https://ajaverett.com/blog/metric.html</link>
+  <link>https://utcounty.github.io/blog/metric.html</link>
   <description><![CDATA[ 
 
 
@@ -52,9 +52,9 @@
   <category>cloud</category>
   <category>field</category>
   <category>data</category>
-  <guid>https://ajaverett.com/blog/metric.html</guid>
+  <guid>https://utcounty.github.io/blog/metric.html</guid>
   <pubDate>Tue, 03 Feb 2026 07:00:00 GMT</pubDate>
-  <media:content url="https://ajaverett.com/blog/images/mylittledonkey.png" medium="image" type="image/png" height="165" width="144"/>
+  <media:content url="https://utcounty.github.io/blog/images/mylittledonkey.png" medium="image" type="image/png" height="165" width="144"/>
 </item>
 </channel>
 </rss>

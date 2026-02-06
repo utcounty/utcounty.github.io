@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<link href="./images/favicon.png" rel="icon" type="image/png">
+<link href="./images/favicon.ico" rel="icon">
 <script src="https://cdn.tailwindcss.com"></script>
 
 
@@ -137,6 +137,142 @@ ul.task-list li input[type="checkbox"] {
   <div class="ucd-rule ucd-rule--bottom" aria-hidden="true"></div>
 
 </header>
+
+<!-- html_chunks/announcement.html -->
+
+<div id="ucd-announcement" class="w-full border-b border-slate-200 bg-[rgba(61,155,255,0.12)] text-slate-900" role="region" aria-label="Announcement">
+
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 text-sm">
+
+    <div class="flex min-w-0 items-center gap-3">
+
+      <!-- Accent dot -->
+
+      <span class="h-2 w-2 shrink-0 rounded-full bg-[rgba(61,155,255,1)]"></span>
+
+
+
+      <p class="truncate">
+
+        <span class="font-semibold">Caucus Night:</span> MAR 17 2026 -
+
+        <a href="https://www.utcountydems.com/issuecaucuses" target="_blank" rel="noopener noreferrer" class="font-semibold text-[rgba(26,102,184,1)] underline decoration-[rgba(61,155,255,0.6)] underline-offset-4 hover:decoration-[rgba(61,155,255,1)]">
+
+          More info
+
+        </a>
+
+      </p>
+
+    </div>
+
+
+
+    <!-- Close -->
+
+    <button type="button" id="ucd-announcement-dismiss" class="group -m-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md hover:bg-[rgba(61,155,255,0.15)] focus:outline-none focus:ring-4 focus:ring-[rgba(61,155,255,0.25)]" aria-label="Dismiss announcement" title="Dismiss">
+
+      <svg class="h-5 w-5 text-slate-600 group-hover:text-slate-900" viewbox="0 0 24 24" aria-hidden="true">
+
+        <path fill="currentColor" d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7A1 1 0 1 0 5.7 7.1l4.9 4.9-4.9 4.9a1 1 0 1 0 1.4 1.4l4.9-4.9 4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4Z"></path>
+
+      </svg>
+
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<style>
+
+  /* Smooth modern dismiss */
+
+  #ucd-announcement {
+
+    max-height: 80px;
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+    transition: max-height 220ms ease, opacity 180ms ease, transform 180ms ease;
+
+    overflow: hidden;
+
+  }
+
+
+
+  #ucd-announcement.ucd-hide {
+
+    max-height: 0 !important;
+
+    opacity: 0;
+
+    transform: translateY(-6px);
+
+  }
+
+</style>
+
+
+
+<script>
+
+  (function () {
+
+    const KEY = "ucd_announcement_dismissed_v4";
+
+    const bar = document.getElementById("ucd-announcement");
+
+    const btn = document.getElementById("ucd-announcement-dismiss");
+
+    if (!bar || !btn) return;
+
+
+
+    try {
+
+      if (localStorage.getItem(KEY) === "1") {
+
+        bar.style.display = "none";
+
+        return;
+
+      }
+
+    } catch {}
+
+
+
+    btn.addEventListener("click", () => {
+
+      bar.classList.add("ucd-hide");
+
+
+
+      try {
+
+        localStorage.setItem(KEY, "1");
+
+      } catch {}
+
+
+
+      setTimeout(() => {
+
+        bar.style.display = "none";
+
+      }, 240);
+
+    });
+
+  })();
+
+</script>
 
 
 <header id="title-block-header">
