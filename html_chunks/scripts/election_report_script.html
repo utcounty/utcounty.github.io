@@ -1,332 +1,548 @@
 <script>
   (function () {
-    // =========================
-    // Config (add more later)
-    // =========================
-    const ELECTION_SOURCES = [
-      {
-        id: "2025-11-04",
-        url: "data/to/20251104_utah_county_municipal_general_election.json",
-      },
-      {
-        id: "2025-08-12",
-        url: "data/to/20250812_utah_county_municipal_primary_election.json",
-      },
-    ];
+    // =========================================================
+    // Config (maintainability)
+    // =========================================================
+    const CFG = {
+      csvUrl: "data/to/utah_county_elections.csv",
 
-    // Set to "Utah County" if your files include multiple counties.
-    // If your JSON already contains only Utah County, you can set this to null.
-    const COUNTY_NAME_FILTER = "Utah County";
+      // Join key from the map
+      precinctField: "precinct_code",
 
-    // Precinct key in the election JSON precinctResults objects (they use .name like "25SR15")
-    const PRECINCT_KEY_FIELD = "name";
+      // Election identity
+      electionDateField: "election_date",
+      electionNameField: "election_name",
 
-    // =========================
+      // Grouping
+      contestField: "contest_name",
+      contestTypeField: "contest_type",
+      choiceField: "choice_name",
+
+      // Metrics
+      votesField: "precinct_votes",
+      ballotsCastField: "precinct_ballots_cast",
+      turnoutField: "voter_turnout",
+      registrationField: "voter_registration",
+      turnoutRateField: "turnout_rate_precinct",
+
+      // Contest summary (repeated per choice row)
+      contestTotalVotesField: "contest_total_votes",
+      contestParticipationRateField: "contest_participation_rate",
+      rolloffRateField: "rolloff_rate",
+      polarizationField: "polarization_fragmentation",
+
+      // Outcome summary (repeated per choice row)
+      winnerChoiceField: "winner_choice_name",
+      runnerupChoiceField: "runnerup_choice_name",
+      winnerVotesField: "winner_votes",
+      runnerupVotesField: "runnerup_votes",
+      marginVotesField: "margin_votes",
+      marginPctField: "margin_pct",
+
+      // Choice detail
+      choiceShareField: "choice_share",
+      choiceRankField: "choice_rank",
+    };
+
+    // =========================================================
     // DOM
-    // =========================
-    const elSelect = document.getElementById("electionSelect");
-    const elReport = document.getElementById("reportBox");
+    // =========================================================
+    const ui = {
+      electionSelect: document.getElementById("electionSelect"),
+      reportBox: document.getElementById("reportBox"),
+    };
 
-    // =========================
-    // Index structures
-    // =========================
-    // REPORT_INDEX:
-    // Map precinctKey -> Map electionId -> { meta, contests: [...] }
-    const REPORT_INDEX = new Map();
+    // =========================================================
+    // State / Indexes
+    // =========================================================
+    const state = {
+      loaded: false,
+      elections: [], // [{ key, date, name, label }]
+      activeElectionKey: "",
 
-    // Elections metadata (id -> meta)
-    const ELECTION_META = new Map();
+      // electionKey -> precinctCode -> contestName -> rows[]
+      idx: new Map(),
 
-    // =========================
-    // Helpers
-    // =========================
-    function normalize(s) {
-      return (s ?? "").toString().trim().toUpperCase();
+      // electionKey|precinctCode -> { ballotsCast, turnout, registration, turnoutRate }
+      precinctMeta: new Map(),
+    };
+
+    // =========================================================
+    // Small utilities
+    // =========================================================
+    const esc = (s) =>
+      String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    const norm = (v) => (v ?? "").toString().trim();
+
+    const toNum = (v) => {
+      if (v === null || v === undefined) return null;
+      const s = String(v).trim();
+      if (!s) return null;
+      const n = Number(s);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const fmtInt = (n) => (Number.isFinite(n) ? Math.round(n).toLocaleString() : "—");
+    const fmtPct = (x, digits = 1) =>
+      Number.isFinite(x) ? `${(x * 100).toFixed(digits)}%` : "—";
+    const fmtPctAbs = (x, digits = 1) =>
+      Number.isFinite(x) ? `${x.toFixed(digits)}%` : "—";
+    const fmtFloat = (x, digits = 3) =>
+      Number.isFinite(x) ? x.toFixed(digits) : "—";
+
+    function setReport(html) {
+      if (!ui.reportBox) return;
+      ui.reportBox.innerHTML = html;
     }
 
-    function safe(v) {
-      return v === null || v === undefined || v === "" ? "—" : String(v);
-    }
+    function setElectionSelectOptions() {
+      if (!ui.electionSelect) return;
 
-    function parseDate(iso) {
-      // iso like "2025-11-04"
-      try {
-        const d = new Date(iso + "T00:00:00");
-        return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
-      } catch {
-        return iso;
+      if (!state.elections.length) {
+        ui.electionSelect.innerHTML = `<option value="">No elections found</option>`;
+        return;
       }
+
+      // Default election: latest date (already sorted desc)
+      if (!state.activeElectionKey) state.activeElectionKey = state.elections[0].key;
+
+      ui.electionSelect.innerHTML = state.elections
+        .map((e) => {
+          const sel = e.key === state.activeElectionKey ? "selected" : "";
+          return `<option value="${esc(e.key)}" ${sel}>${esc(e.label)}</option>`;
+        })
+        .join("");
     }
 
-    function statusRank(s) {
-      // worse = higher number
-      const t = (s || "").toLowerCase();
-      if (t.includes("not")) return 3;
-      if (t.includes("partial")) return 2;
-      if (t.includes("report")) return 1; // "Reported"
-      return 0;
-    }
+    // =========================================================
+    // CSV parsing (simple + quote-aware per line)
+    // =========================================================
+    function splitCSVLine(line) {
+      const out = [];
+      let cur = "";
+      let inQ = false;
 
-    function worstStatus(statuses) {
-      if (!statuses.length) return "—";
-      let worst = statuses[0];
-      for (const s of statuses) {
-        if (statusRank(s) > statusRank(worst)) worst = s;
-      }
-      return worst || "—";
-    }
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
 
-    function ensurePrecinctElection(precinctKey, electionId, meta) {
-      if (!REPORT_INDEX.has(precinctKey)) REPORT_INDEX.set(precinctKey, new Map());
-      const perElection = REPORT_INDEX.get(precinctKey);
-      if (!perElection.has(electionId)) perElection.set(electionId, { meta, contests: [] });
-      return perElection.get(electionId);
-    }
-
-    // =========================
-    // Parse election JSON -> index
-    // =========================
-    function indexElectionJson(data, source) {
-      const meta = {
-        id: source.id,
-        url: source.url,
-        electionDate: safe(data.electionDate),
-        electionName: safe(data.electionName),
-        createdAt: safe(data.createdAt),
-      };
-      ELECTION_META.set(meta.id, meta);
-
-      const localResults = Array.isArray(data.localResults) ? data.localResults : [];
-
-      const counties = COUNTY_NAME_FILTER
-        ? localResults.filter((c) => normalize(c.name) === normalize(COUNTY_NAME_FILTER))
-        : localResults;
-
-      // If county filter yields nothing, fall back to all localResults
-      const workingCounties = counties.length ? counties : localResults;
-
-      for (const county of workingCounties) {
-        const ballotItems = Array.isArray(county.ballotItems) ? county.ballotItems : [];
-
-        for (const item of ballotItems) {
-          const contestName = safe(item.name);
-          const contestId = safe(item.id);
-          const voteFor = Number(item.voteFor || 1);
-
-          const options = Array.isArray(item.ballotOptions) ? item.ballotOptions : [];
-          if (!options.length) continue;
-
-          // Build per-precinct accumulator for this contest
-          // Map precinctKey -> { options: [{name, votes, status}], statuses: [] }
-          const perPrecinct = new Map();
-
-          for (const opt of options) {
-            const pr = Array.isArray(opt.precinctResults) ? opt.precinctResults : [];
-            if (!pr.length) continue;
-
-            for (const row of pr) {
-              const precinctRaw = row && row[PRECINCT_KEY_FIELD];
-              const precinctKey = normalize(precinctRaw);
-              if (!precinctKey) continue;
-
-              if (!perPrecinct.has(precinctKey)) {
-                perPrecinct.set(precinctKey, { options: [], statuses: [] });
-              }
-              const acc = perPrecinct.get(precinctKey);
-
-              const rc = Number(row.voteCount || 0);
-              const rs = safe(row.reportingStatus);
-
-              acc.options.push({
-                candidateId: safe(opt.id),
-                candidateName: safe(opt.name),
-                votes: rc,
-                reportingStatus: rs,
-              });
-              acc.statuses.push(rs);
-            }
+        if (c === '"') {
+          // escaped quote
+          if (inQ && line[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else {
+            inQ = !inQ;
           }
-
-          // Commit contest for each precinct where we found results
-          for (const [precinctKey, acc] of perPrecinct.entries()) {
-            const totalVotes = acc.options.reduce((s, o) => s + (Number(o.votes) || 0), 0);
-            const contestStatus = worstStatus(acc.statuses);
-
-            const bucket = ensurePrecinctElection(precinctKey, meta.id, meta);
-            bucket.contests.push({
-              contestId,
-              contestName,
-              voteFor,
-              totalVotes,
-              reportingStatus: contestStatus,
-              options: acc.options.sort((a, b) => (b.votes || 0) - (a.votes || 0)),
-            });
-          }
+        } else if (c === "," && !inQ) {
+          out.push(cur);
+          cur = "";
+        } else {
+          cur += c;
         }
       }
+      out.push(cur);
+      return out;
     }
 
-    // =========================
-    // Render
-    // =========================
-    function renderForPrecinct(precinctIdRaw) {
-      const precinctKey = normalize(precinctIdRaw);
-      if (!precinctKey) return;
+    function parseCSV(text) {
+      const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n");
+      const nonEmpty = lines.filter((l) => l.trim().length > 0);
+      if (!nonEmpty.length) return [];
 
-      if (!REPORT_INDEX.has(precinctKey)) {
-        elReport.innerHTML =
-          `<div class="text-slate-700">No election results found for <span class="font-mono">${safe(precinctIdRaw)}</span> ` +
-          `in the loaded JSON files.</div>`;
-        return;
+      const header = splitCSVLine(nonEmpty[0]).map((h) => h.trim());
+      const rows = [];
+
+      for (let i = 1; i < nonEmpty.length; i++) {
+        const cols = splitCSVLine(nonEmpty[i]);
+        if (!cols.length) continue;
+
+        const obj = {};
+        for (let j = 0; j < header.length; j++) {
+          obj[header[j]] = cols[j] ?? "";
+        }
+        rows.push(obj);
       }
 
-      const perElection = REPORT_INDEX.get(precinctKey);
+      return rows;
+    }
 
-      // pick election from dropdown (or first available)
-      let electionId = elSelect && elSelect.value ? elSelect.value : "";
-      if (!electionId || !perElection.has(electionId)) {
-        electionId = Array.from(perElection.keys()).sort().reverse()[0];
-        if (elSelect) elSelect.value = electionId;
+    // =========================================================
+    // Index building
+    // =========================================================
+    function electionKey(row) {
+      const d = norm(row[CFG.electionDateField]);
+      const n = norm(row[CFG.electionNameField]);
+      return `${d}|${n}`;
+    }
+
+    function buildIndexes(rows) {
+      const electionSeen = new Map(); // key -> {date,name}
+
+      for (const r0 of rows) {
+        const r = r0;
+
+        // normalize strings
+        const precinct = norm(r[CFG.precinctField]).toUpperCase();
+        const eDate = norm(r[CFG.electionDateField]);
+        const eName = norm(r[CFG.electionNameField]);
+        const contest = norm(r[CFG.contestField]);
+        const contestType = norm(r[CFG.contestTypeField]);
+        const choice = norm(r[CFG.choiceField]);
+
+        if (!precinct || !eName || !eDate || !contest || !choice) continue;
+
+        // cast numeric-ish fields
+        const votes = toNum(r[CFG.votesField]);
+        const ballotsCast = toNum(r[CFG.ballotsCastField]);
+        const turnout = toNum(r[CFG.turnoutField]);
+        const registration = toNum(r[CFG.registrationField]);
+        const turnoutRate = toNum(r[CFG.turnoutRateField]);
+
+        const contestTotalVotes = toNum(r[CFG.contestTotalVotesField]);
+        const contestParticipationRate = toNum(r[CFG.contestParticipationRateField]);
+        const rolloffRate = toNum(r[CFG.rolloffRateField]);
+        const polarization = toNum(r[CFG.polarizationField]);
+
+        const winnerVotes = toNum(r[CFG.winnerVotesField]);
+        const runnerupVotes = toNum(r[CFG.runnerupVotesField]);
+        const marginVotes = toNum(r[CFG.marginVotesField]);
+        const marginPct = toNum(r[CFG.marginPctField]);
+
+        const choiceShare = toNum(r[CFG.choiceShareField]);
+        const choiceRank = toNum(r[CFG.choiceRankField]);
+
+        const winnerChoiceName = norm(r[CFG.winnerChoiceField]);
+        const runnerupChoiceName = norm(r[CFG.runnerupChoiceField]);
+
+        const ek = `${eDate}|${eName}`;
+        electionSeen.set(ek, { date: eDate, name: eName });
+
+        // idx init
+        if (!state.idx.has(ek)) state.idx.set(ek, new Map());
+        const eMap = state.idx.get(ek);
+
+        if (!eMap.has(precinct)) eMap.set(precinct, new Map());
+        const pMap = eMap.get(precinct);
+
+        if (!pMap.has(contest)) pMap.set(contest, []);
+        const bucket = pMap.get(contest);
+
+        bucket.push({
+          precinct,
+          eDate,
+          eName,
+          contest,
+          contestType,
+          choice,
+
+          votes,
+          ballotsCast,
+          turnout,
+          registration,
+          turnoutRate,
+
+          contestTotalVotes,
+          contestParticipationRate,
+          rolloffRate,
+          polarization,
+
+          winnerChoiceName,
+          runnerupChoiceName,
+          winnerVotes,
+          runnerupVotes,
+          marginVotes,
+          marginPct,
+
+          choiceShare,
+          choiceRank,
+        });
+
+        // precinct meta (store once)
+        const metaKey = `${ek}|${precinct}`;
+        if (!state.precinctMeta.has(metaKey)) {
+          state.precinctMeta.set(metaKey, {
+            ballotsCast,
+            turnout,
+            registration,
+            turnoutRate,
+          });
+        } else {
+          // fill blanks if needed
+          const m = state.precinctMeta.get(metaKey);
+          if (!Number.isFinite(m.ballotsCast) && Number.isFinite(ballotsCast)) m.ballotsCast = ballotsCast;
+          if (!Number.isFinite(m.turnout) && Number.isFinite(turnout)) m.turnout = turnout;
+          if (!Number.isFinite(m.registration) && Number.isFinite(registration)) m.registration = registration;
+          if (!Number.isFinite(m.turnoutRate) && Number.isFinite(turnoutRate)) m.turnoutRate = turnoutRate;
+        }
       }
 
-      const pack = perElection.get(electionId);
-      const meta = pack.meta;
+      // elections list (sort desc by date)
+      state.elections = Array.from(electionSeen.entries())
+        .map(([key, v]) => ({
+          key,
+          date: v.date,
+          name: v.name,
+          label: `${v.date} · ${v.name}`,
+        }))
+        .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.name.localeCompare(b.name)));
+    }
 
-      // sort contests by name (or keep input order)
-      const contests = pack.contests.slice();
+    // =========================================================
+    // Rendering
+    // =========================================================
+    function contestSortKey(rows) {
+      // prefer higher contest_total_votes, fallback to winner_votes
+      const r = rows[0] || {};
+      const a = Number.isFinite(r.contestTotalVotes) ? r.contestTotalVotes : -1;
+      const b = Number.isFinite(r.winnerVotes) ? r.winnerVotes : -1;
+      return a !== -1 ? a : b;
+    }
 
-      // Ballots-cast proxy: max totalVotes among voteFor == 1 contests
-      const singleSeat = contests.filter((c) => c.voteFor === 1);
-      const ballotsProxy = singleSeat.length
-        ? Math.max(...singleSeat.map((c) => c.totalVotes || 0))
-        : null;
+    function renderContestBlock(contestName, rows) {
+      // sort choices by rank then votes desc
+      const sorted = [...rows].sort((a, b) => {
+        const ar = Number.isFinite(a.choiceRank) ? a.choiceRank : 9999;
+        const br = Number.isFinite(b.choiceRank) ? b.choiceRank : 9999;
+        if (ar !== br) return ar - br;
+        const av = Number.isFinite(a.votes) ? a.votes : -1;
+        const bv = Number.isFinite(b.votes) ? b.votes : -1;
+        return bv - av;
+      });
 
-      const header = `
-        <div class="mb-3">
-          <div class="text-sm font-semibold text-slate-900">${safe(meta.electionName)}</div>
-          <div class="text-xs text-slate-600">${parseDate(meta.electionDate)} · Precinct <span class="font-mono">${safe(precinctIdRaw)}</span></div>
+      const r0 = sorted[0] || {};
+      const winner = r0.winnerChoiceName || "—";
+      const runner = r0.runnerupChoiceName || "—";
+
+      const headerRight = `
+        <div class="text-xs text-slate-500">
+          <span class="font-semibold text-slate-700">${fmtInt(r0.contestTotalVotes)}</span> votes
+          <span class="mx-2 text-slate-300">•</span>
+          margin <span class="font-semibold text-slate-700">${fmtInt(r0.marginVotes)}</span>
+          (${fmtPct(r0.marginPct, 1)})
         </div>
       `;
 
-      const summary = `
-        <div class="grid gap-2 sm:grid-cols-3 mb-4">
-          <div class="rounded-md bg-white p-3 border border-slate-200">
-            <div class="text-xs uppercase tracking-wider text-slate-500">Contests</div>
-            <div class="text-lg font-semibold text-slate-900">${contests.length.toLocaleString()}</div>
+      const metaRow = `
+        <div class="mt-3 grid gap-2 sm:grid-cols-3 text-xs text-slate-600">
+          <div class="rounded-lg bg-slate-50 px-3 py-2">
+            <div class="uppercase tracking-wide text-[10px] text-slate-500">Winner</div>
+            <div class="font-semibold text-slate-900">${esc(winner)}</div>
           </div>
-          <div class="rounded-md bg-white p-3 border border-slate-200">
-            <div class="text-xs uppercase tracking-wider text-slate-500">Ballots proxy</div>
-            <div class="text-lg font-semibold text-slate-900">${ballotsProxy === null ? "—" : ballotsProxy.toLocaleString()}</div>
-            <div class="text-[11px] text-slate-500 mt-1">Max votes in vote-for-1 contest (not official turnout)</div>
+          <div class="rounded-lg bg-slate-50 px-3 py-2">
+            <div class="uppercase tracking-wide text-[10px] text-slate-500">Runner-up</div>
+            <div class="font-semibold text-slate-900">${esc(runner)}</div>
           </div>
-          <div class="rounded-md bg-white p-3 border border-slate-200">
-            <div class="text-xs uppercase tracking-wider text-slate-500">Data source</div>
-            <div class="text-sm font-semibold text-slate-900">JSON</div>
-            <div class="text-[11px] text-slate-500 mt-1">${safe(meta.createdAt)}</div>
+          <div class="rounded-lg bg-slate-50 px-3 py-2">
+            <div class="uppercase tracking-wide text-[10px] text-slate-500">Participation</div>
+            <div class="font-semibold text-slate-900">
+              ${fmtFloat(r0.contestParticipationRate, 3)}
+              <span class="text-slate-500 font-normal">(votes/ballot)</span>
+            </div>
           </div>
         </div>
       `;
 
-      const contestBlocks = contests
-        .map((c) => {
-          const rows = c.options
-            .map(
-              (o) => `
-              <tr class="border-t border-slate-100">
-                <td class="py-2 pr-3 text-slate-900">${safe(o.candidateName)}</td>
-                <td class="py-2 pr-3 text-right font-mono text-slate-900">${Number(o.votes || 0).toLocaleString()}</td>
-                <td class="py-2 text-right text-xs text-slate-500">${safe(o.reportingStatus)}</td>
-              </tr>
-            `
-            )
-            .join("");
-
+      const tableRows = sorted
+        .map((x) => {
+          const share = fmtPct(x.choiceShare, 1);
           return `
-            <details class="rounded-md border border-slate-200 bg-white">
-              <summary class="cursor-pointer select-none px-3 py-3 flex items-start justify-between gap-3">
-                <div class="min-w-0">
-                  <div class="text-sm font-semibold text-slate-900 leading-tight">${safe(c.contestName)}</div>
-                  <div class="mt-0.5 text-xs text-slate-600">
-                    voteFor: ${safe(c.voteFor)} · total votes: <span class="font-mono">${Number(c.totalVotes || 0).toLocaleString()}</span>
-                  </div>
-                </div>
-                <div class="shrink-0 text-xs font-semibold text-slate-600">${safe(c.reportingStatus)}</div>
-              </summary>
-
-              <div class="px-3 pb-3">
-                <table class="w-full text-sm">
-                  <thead>
-                    <tr class="text-xs uppercase tracking-wider text-slate-500">
-                      <th class="py-2 text-left font-semibold">Option</th>
-                      <th class="py-2 text-right font-semibold">Votes</th>
-                      <th class="py-2 text-right font-semibold">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>${rows}</tbody>
-                </table>
-              </div>
-            </details>
+            <tr class="border-t border-slate-200">
+              <td class="px-3 py-2 text-slate-900">${esc(x.choice)}</td>
+              <td class="px-3 py-2 text-right font-mono text-slate-900">${fmtInt(x.votes)}</td>
+              <td class="px-3 py-2 text-right text-slate-700">${share}</td>
+              <td class="px-3 py-2 text-right text-slate-500">${Number.isFinite(x.choiceRank) ? x.choiceRank : "—"}</td>
+            </tr>
           `;
-        })
-        .join('<div class="h-3"></div>');
-
-      elReport.innerHTML = header + summary + contestBlocks;
-    }
-
-    // =========================
-    // Load elections
-    // =========================
-    async function loadAll() {
-      if (!elSelect || !elReport) return;
-
-      elSelect.innerHTML = `<option value="">Loading…</option>`;
-
-      const loads = await Promise.allSettled(
-        ELECTION_SOURCES.map(async (src) => {
-          const res = await fetch(src.url, { cache: "no-store" });
-          if (!res.ok) throw new Error(`Failed ${src.url}: HTTP ${res.status}`);
-          const data = await res.json();
-          indexElectionJson(data, src);
-          return src.id;
-        })
-      );
-
-      const okIds = loads
-        .filter((r) => r.status === "fulfilled")
-        .map((r) => r.value)
-        .sort()
-        .reverse();
-
-      if (!okIds.length) {
-        elSelect.innerHTML = `<option value="">No data</option>`;
-        elReport.innerHTML =
-          `<div class="text-red-700">Could not load election JSON files. Check that they exist in the built site output.</div>`;
-        return;
-      }
-
-      elSelect.innerHTML = okIds
-        .map((id) => {
-          const m = ELECTION_META.get(id);
-          const label = m ? `${parseDate(m.electionDate)} · ${m.electionName}` : id;
-          return `<option value="${id}">${label}</option>`;
         })
         .join("");
 
-      // Change election selection -> re-render if a precinct is selected
-      elSelect.addEventListener("change", () => {
-        const last = window.UCD_LAST_SELECTED_PRECINCT || "";
-        if (last) renderForPrecinct(last);
-      });
+      return `
+        <details class="group rounded-xl border border-slate-200 bg-white">
+          <summary class="cursor-pointer list-none px-4 py-3">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="text-sm font-semibold text-slate-900">${esc(contestName)}</div>
+                <div class="mt-0.5 text-xs text-slate-500">${esc(r0.contestType || "")}</div>
+              </div>
+              <div class="hidden sm:block">${headerRight}</div>
+            </div>
+            <div class="mt-2 sm:hidden">${headerRight}</div>
+            <div class="mt-2 text-xs text-slate-500 group-open:hidden">Click to expand</div>
+          </summary>
 
-      // If map already selected something before data finished loading
-      const last = window.UCD_LAST_SELECTED_PRECINCT || "";
-      if (last) renderForPrecinct(last);
-      else elReport.innerHTML = "Select a precinct to populate this report.";
+            <div class="mt-4 overflow-hidden rounded-lg border border-slate-200">
+              <table class="w-full text-sm">
+                <thead class="bg-slate-50 text-xs text-slate-600">
+                  <tr>
+                    <th class="px-3 py-2 text-left font-semibold">Choice</th>
+                    <th class="px-3 py-2 text-right font-semibold">Votes</th>
+                    <th class="px-3 py-2 text-right font-semibold">Share</th>
+                    <th class="px-3 py-2 text-right font-semibold">Rank</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white">
+                  ${tableRows}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-3 text-xs text-slate-500">
+              Fragmentation: <span class="font-mono text-slate-700">${fmtFloat(r0.polarization, 3)}</span>
+              <span class="mx-2 text-slate-300">•</span>
+              Roll-off rate: <span class="font-mono text-slate-700">${fmtFloat(r0.rolloffRate, 3)}</span>
+            </div>
+          </div>
+        </details>
+      `;
     }
 
-    // expose API for the map script
-    window.UCDReports = { renderForPrecinct };
+    function renderForPrecinct(precinctCodeRaw) {
+      const precinctCode = norm(precinctCodeRaw).toUpperCase();
 
-    loadAll();
+      if (!state.loaded) {
+        setReport(`<div class="text-sm text-slate-700">Loading election data…</div>`);
+        return;
+      }
+
+      const ek = state.activeElectionKey || (state.elections[0] && state.elections[0].key) || "";
+      if (!ek) {
+        setReport(`<div class="text-sm text-slate-700">No election data available.</div>`);
+        return;
+      }
+
+      const eMap = state.idx.get(ek);
+      const pMap = eMap ? eMap.get(precinctCode) : null;
+
+      if (!precinctCode) {
+        setReport(`<div class="text-sm text-slate-700">Select a precinct to populate this report.</div>`);
+        return;
+      }
+
+      if (!pMap) {
+        setReport(`
+          <div class="text-sm text-slate-700">
+            <div class="font-semibold text-slate-900">No data for ${esc(precinctCode)}</div>
+            <div class="mt-1 text-slate-600">This precinct may not participate in the selected election, or results are missing.</div>
+          </div>
+        `);
+        return;
+      }
+
+      const meta = state.precinctMeta.get(`${ek}|${precinctCode}`) || {};
+      const ballotsCast = meta.ballotsCast;
+      const turnout = meta.turnout;
+      const reg = meta.registration;
+
+      // Prefer computed turnoutRate, otherwise derive
+      const turnoutRate =
+        Number.isFinite(meta.turnoutRate)
+          ? meta.turnoutRate
+          : (Number.isFinite(turnout) && Number.isFinite(reg) && reg > 0 ? turnout / reg : null);
+
+      // contests sorted by vote volume
+      const contests = Array.from(pMap.entries())
+        .sort((a, b) => contestSortKey(b[1]) - contestSortKey(a[1]));
+
+      const electionLabel = state.elections.find((x) => x.key === ek)?.label || ek;
+
+      const contestBlocks = contests
+        .map(([contestName, rows]) => renderContestBlock(contestName, rows))
+        .join('<div class="h-3"></div>');
+
+      setReport(`
+        <div class="space-y-4">
+          <div class="flex flex-col gap-1">
+            <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Selected precinct</div>
+            <div class="flex flex-wrap items-end justify-between gap-3">
+              <div class="text-lg font-semibold text-slate-900">
+                <span class="font-mono">${esc(precinctCode)}</span>
+              </div>
+              <div class="text-xs text-slate-500">${esc(electionLabel)}</div>
+            </div>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-3">
+            <div class="rounded-xl border border-slate-200 bg-white p-4">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Registered</div>
+              <div class="mt-1 text-xl font-semibold text-slate-900">${fmtInt(reg)}</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-white p-4">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Ballots cast</div>
+              <div class="mt-1 text-xl font-semibold text-slate-900">${fmtInt(ballotsCast)}</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-white p-4">
+              <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">Turnout rate</div>
+              <div class="mt-1 text-xl font-semibold text-slate-900">${fmtPct(turnoutRate, 1)}</div>
+              <div class="mt-1 text-xs text-slate-500">Turnout: ${fmtInt(turnout)}</div>
+            </div>
+          </div>
+
+          <div class="pt-1">
+            <div class="text-sm font-semibold text-slate-900">Contests</div>
+            <div class="mt-2 space-y-3">
+              ${contestBlocks}
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    // =========================================================
+    // Load + init
+    // =========================================================
+    async function load() {
+      setReport(`<div class="text-sm text-slate-700">Loading election data…</div>`);
+
+      let text = "";
+      try {
+        const res = await fetch(CFG.csvUrl, { cache: "no-store" });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        text = await res.text();
+      } catch (err) {
+        console.error(err);
+        setReport(`
+          <div class="text-sm text-red-700">
+            Failed to load <span class="font-mono">${esc(CFG.csvUrl)}</span>. Check the path and Quarto resources.
+          </div>
+        `);
+        return;
+      }
+
+      const rows = parseCSV(text);
+      buildIndexes(rows);
+
+      state.loaded = true;
+      state.activeElectionKey = state.elections[0] ? state.elections[0].key : "";
+
+      setElectionSelectOptions();
+
+      // Render if a precinct was already selected by the map script
+      const last = (window.UCD_LAST_SELECTED_PRECINCT || "").toString().trim();
+      if (last) renderForPrecinct(last);
+      else setReport(`<div class="text-sm text-slate-700">Select a precinct to populate this report.</div>`);
+    }
+
+    // Election change handler
+    if (ui.electionSelect) {
+      ui.electionSelect.addEventListener("change", () => {
+        state.activeElectionKey = ui.electionSelect.value || "";
+        const last = (window.UCD_LAST_SELECTED_PRECINCT || "").toString().trim();
+        if (last) renderForPrecinct(last);
+        else setReport(`<div class="text-sm text-slate-700">Select a precinct to populate this report.</div>`);
+      });
+    }
+
+    // Expose hook for the map script
+    window.UCDReports = {
+      renderForPrecinct,
+    };
+
+    load();
   })();
 </script>

@@ -2,8 +2,7 @@
 title: "Maps"
 resources:
   - "data/geo/utah_county_precincts.min.geojson"
-  - "data/to/20251104_utah_county_municipal_general_election.json"
-  - "data/to/20250812_utah_county_municipal_primary_election.json"
+  - "data/to/utah_county_elections.csv"
 format:
   html:
     minimal: true
@@ -19,8 +18,8 @@ format:
       - html_chunks/scripts/menu_script.html
       - html_chunks/scripts/index_script.html
       - html_chunks/scripts/header_bug_fix.html
-      - html_chunks/scripts/maps_script.html
       - html_chunks/scripts/election_report_script.html
+      - html_chunks/scripts/maps_script.html
 ---
 
 ::: {.column-screen}
