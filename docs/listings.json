@@ -2,8 +2,8 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/blog/welcome.html",
-      "/blog/metric.html"
+      "/blog/metric.html",
+      "/blog/welcome.html"
     ]
   }
 ]

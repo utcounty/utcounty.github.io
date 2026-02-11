@@ -1,0 +1,131 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph RegionalOrg["Regional Organizations (Bylaws Art I, Sec 3)"]
+    direction TB
+        RegNorth["North Region<br>(Bylaws Art I, Sec 3[i])"]
+        RegCentral["Central Region<br>(Bylaws Art I, Sec 3[ii])"]
+        RegEast["East Region<br>(Bylaws Art I, Sec 3[iii])"]
+        RegWest["West Region<br>(Bylaws Art I, Sec 3[iv])"]
+  end
+ subgraph LocalOrg["Local Organizations"]
+        Precincts["Precinct Organizations<br>(Const Art VII, Sec 10)"]
+        Counties["County Parties<br>(Const Art VII, Sec 1)"]
+  end
+ subgraph Grassroots["The Grassroots Base"]
+        Members["Party Membership<br>(Const Art I, Sec 3)"]
+        RegionalOrg
+        LocalOrg
+  end
+ subgraph Conventions["State Conventions (Supreme Authority)"]
+    direction TB
+        Delegates["State Delegates<br>(Const Art VII, Sec 7)"]
+        NomConv["State Nominating Convention<br>(Even Years)<br>(Const Art VIII, Sec 1)"]
+        OrgConv["State Organizing Convention<br>(Odd Years)<br>(Const Art IX, Sec 1)"]
+  end
+ subgraph SCC_SubComms["6 Standing Sub-Committees (Bylaws Art IV, Sec 8)"]
+        SubMob["Mobilization<br>Public Relations<br> Fundraising<br> Technology<br> Candidate Recruitment<br> Public Policy &amp; Platform"]
+  end
+ subgraph Legislative["Legislative Body"]
+        SCC["State Central Committee (SCC)<br>(Const Art III, Sec 1)"]
+        SCC_SubComms
+  end
+ subgraph SEC_NonVoting["Non-Voting Advisory Members <br> (Bylaws Art V, Sec 4)"]
+        PastChair["Immediate Past Chair"]
+        YD_Pres["Pres. of Young Dems"]
+        RegCoord["Regional Coordinators"]
+  end
+ subgraph Executive["Executive Body"]
+        SEC["State Executive Committee (SEC)<br>(Const Art IV, Sec 1)"]
+        SEC_NonVoting
+        Staff["Party Staff / Exec Director<br>(Const Art IV, Sec 2[vi])"]
+  end
+ subgraph Governing["Governing Bodies"]
+        Legislative
+        Executive
+  end
+ subgraph OfficerGroup["State Executive Officers (Const Art V, Sec 1)"]
+        Chair["State Chair<br>(Const Art V, Sec 2)"]
+        ViceChair["State Vice Chair<br>(Const Art V, Sec 3)"]
+        Secretary["State Secretary<br>(Const Art V, Sec 4)"]
+        Treasurer["State Treasurer<br>(Const Art V, Sec 5)"]
+        DNC["DNC Members<br>(Const Art V, Sec 6)"]
+  end
+ subgraph Identity["18 Recognized Caucuses (Bylaws Art X, Sec 2)"]
+    direction TB
+        C_AAPI@{ label: "Asian American/Pacific Islander, Black, Hispanic, Native American<br><br>College Dems, Young Dems, Senior<br><br>Disability, Stonewall, Veterans, Women's, Rural, LDS Dems<br><br>Education, Environmental, Healthcare, Labor, Progressive" }
+  end
+ subgraph Committees["Committees & Caucuses"]
+        Rules["Rules Standing Cmte<br>(Const Art VI, Sec 1[i])"]
+        Judicial["Judicial Standing Cmte<br>(Const Art VI, Sec 1[ii])"]
+        Identity
+  end
+    Members --> Precincts
+    Precincts --> Counties
+    Counties -- Grouped into (Bylaws Art I, Sec 3) --> RegionalOrg
+    RegionalOrg --> Delegates
+    Delegates --> NomConv & OrgConv
+    OrgConv --> Chair & ViceChair & Secretary & Treasurer
+    NomConv --> DNC
+    Chair -- Presides --> SCC & SEC
+    Chair -- Manages --> Staff
+    Secretary --> SCC
+    Treasurer --> SEC
+    RegionalOrg -. Sends Regional Reps<br>(Const Art III, Sec 3) .-> SCC
+    OfficerGroup -- Voting Members --> SCC & SEC
+    Identity -. Chairs/VCs are Members<br>(Const Art III, Sec 3) .-> SCC
+    Rules -. Chair/VC are Members .-> SCC
+    Judicial -. Chair/VC are Members .-> SCC
+    SCC -- Establishes (Bylaws Art IV, Sec 8) --> SCC_SubComms
+    SEC_NonVoting -. Advisory Capacity<br>(Bylaws Art V, Sec 4) .-> SEC
+    Identity -. Sends Chair of Caucus Chairs<br>(Const Art IV, Sec 3) .-> SEC
+    Counties -. Sends Chair of County Chairs<br>(Const Art IV, Sec 3) .-> SEC
+    SCC -- Legislates Policy --> SEC
+    SEC -- Executes Policy --> Staff
+    SEC -- Proposes Budget --> SCC
+    Chair -- Appoints --> Rules & Judicial
+    SCC -- Approves Charters --> Identity
+
+    C_AAPI@{ shape: rect}
+     Members:::grassroots
+     RegNorth:::regions
+     RegCentral:::regions
+     RegEast:::regions
+     RegWest:::regions
+     Precincts:::grassroots
+     Counties:::grassroots
+     Delegates:::convention
+     NomConv:::convention
+     OrgConv:::convention
+     SCC:::legislative
+     SubMob:::subcomm
+     SEC:::executive
+     PastChair:::nonvoting
+     YD_Pres:::nonvoting
+     RegCoord:::nonvoting
+     Staff:::executive
+     Chair:::officers
+     ViceChair:::officers
+     Secretary:::officers
+     Treasurer:::officers
+     DNC:::officers
+     Rules:::committees
+     Judicial:::committees
+     C_AAPI:::caucuses
+     RegionalOrg:::regions
+     OfficerGroup:::officers
+     Identity:::committees
+     SCC_SubComms:::legislative
+     SEC_NonVoting:::nonvoting
+    classDef grassroots fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef regions fill:#b3e5fc,stroke:#0277bd,stroke-width:2px
+    classDef convention fill:#fff9c4,stroke:#fbc02d,stroke-width:2px
+    classDef legislative fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef subcomm fill:#c8e6c9,stroke:#1b5e20,stroke-width:1px
+    classDef executive fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef nonvoting fill:#f8bbd0,stroke:#ad1457,stroke-width:2px,stroke-dasharray: 5 5
+    classDef committees fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef caucuses fill:#e1bee7,stroke:#7b1fa2,stroke-width:1px
+    classDef officers fill:#ffccbc,stroke:#bf360c,stroke-width:2px

@@ -13,12 +13,6 @@ website:
   site-url: "https://utcounty.github.io" 
   open-graph: true
   twitter-card: true
-  announcement: 
-    icon: info-circle
-    dismissable: true
-    content: "**Alert** - Caucus Night is Tuesday, March 17, 2026"
-    type: primary
-    position: above-navbar
 
 
 format:

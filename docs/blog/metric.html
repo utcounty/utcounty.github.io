@@ -6,9 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-02-03">
+<meta name="dcterms.date" content="2026-02-08">
+<meta name="description" content="A technical guide to the concepts and calculated columns in utah_county_elections.csv">
 
-<title>Quick Metric: Contact → Show Rate – Utah County Political Data</title>
+<title>Understanding Precinct Level Data – Utah County Political Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../images/favicon.png" rel="icon" type="image/png">
+<link href="../images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -67,70 +68,764 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner h1,
+      .quarto-title-block .quarto-title-banner h2,
+      .quarto-title-block .quarto-title-banner h3,
+      .quarto-title-block .quarto-title-banner h4,
+      .quarto-title-block .quarto-title-banner h5,
+      .quarto-title-block .quarto-title-banner h6
+      {
+        color: white;
+      }
+
+      .quarto-title-block .quarto-title-banner {
+        color: white;
+background-image: url(../images/banner.png);
+background-size: cover;
+      }
+</style>
+<script src="https://cdn.tailwindcss.com"></script>
 
 
-<link rel="stylesheet" href="../styles/styles.css">
-<meta property="og:title" content="Quick Metric: Contact → Show Rate – Utah County Political Data">
-<meta property="og:description" content="Utah County Data for Progress">
-<meta property="og:image" content="https://ajaverett.com/blog/images/mylittledonkey.png">
+
+<script>
+
+  tailwind.config = {
+
+    theme: {
+
+      extend: {
+
+        colors: {
+
+          brand: {
+
+            50: "#f2f9ff",
+
+            100: "#e6f3ff",
+
+            200: "#cfe8ff",
+
+            300: "#a7d4ff",
+
+            400: "#73b8ff",
+
+            500: "#3d9bff",
+
+            600: "#1f7fe8",
+
+            700: "#1a66b8",
+
+            800: "#194f8a",
+
+            900: "#173f6a",
+
+          },
+
+        },
+
+      },
+
+    },
+
+  };
+
+</script>
+
+
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    document.body.classList.add("min-h-screen", "bg-white", "text-slate-900");
+
+  });
+
+</script>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Inter:wght@400;600;800&amp;display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
+
+  <style>
+
+    #body_div { font-family: 'Inter', sans-serif; }
+
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+
+
+    /* Subtle background grid */
+
+    .pattern-grid {
+
+      background-image:
+
+        linear-gradient(#cbd5e1 1px, transparent 1px),
+
+        linear-gradient(90deg, #cbd5e1 1px, transparent 1px);
+
+      background-size: 20px 20px;
+
+    }
+
+
+
+    .math-card {
+
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    }
+
+    .math-card:hover {
+
+      transform: translateY(-2px);
+
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.10), 0 4px 6px -2px rgba(0,0,0,0.06);
+
+    }
+
+  </style>
+
+<meta property="og:title" content="Understanding Precinct Level Data – Utah County Political Data">
+<meta property="og:description" content="A technical guide to the concepts and calculated columns in utah_county_elections.csv">
+<meta property="og:image" content="https://gis.utah.gov/_assets/pres_elec_2020_results.sBYuJEQn_WyKG7.webp">
 <meta property="og:site_name" content="Utah County Political Data">
-<meta property="og:image:height" content="241">
-<meta property="og:image:width" content="210">
-<meta name="twitter:title" content="Quick Metric: Contact → Show Rate – Utah County Political Data">
-<meta name="twitter:description" content="Utah County Data for Progress">
-<meta name="twitter:image" content="https://ajaverett.com/blog/images/mylittledonkey.png">
-<meta name="twitter:image-height" content="241">
-<meta name="twitter:image-width" content="210">
+<meta name="twitter:title" content="Understanding Precinct Level Data – Utah County Political Data">
+<meta name="twitter:description" content="A technical guide to the concepts and calculated columns in utah_county_elections.csv">
+<meta name="twitter:image" content="https://gis.utah.gov/_assets/pres_elec_2020_results.sBYuJEQn_WyKG7.webp">
 <meta name="twitter:card" content="summary_large_image">
-</head>
+</head><body><header class="ucd-masthead">
 
-<body class="fullcontent">
+  <div class="ucd-rule ucd-rule--top" aria-hidden="true"></div>
 
-<div id="quarto-search-results"></div>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
-<!-- sidebar -->
-<!-- margin-sidebar -->
-    
-<!-- main -->
-<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Quick Metric: Contact → Show Rate</h1>
-  <div class="quarto-categories">
-    <div class="quarto-category">cloud</div>
-    <div class="quarto-category">field</div>
-    <div class="quarto-category">data</div>
+
+  <div class="ucd-masthead-inner">
+
+    <a class="ucd-wordmark" href="../index.html">
+
+      Utah County Political Data
+
+    </a>
+
+
+
+    <br>
+
+
+
+    <nav class="ucd-nav" aria-label="Primary">
+
+      <a class="ucd-navlink" href="../blog.html" data-nav="blog">Blog</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="../maps.html" data-nav="maps">Maps</a>
+
+      <span class="ucd-dot" aria-hidden="true">·</span>
+
+      <a class="ucd-navlink" href="../about.html" data-nav="about">About</a>
+
+    </nav>
+
   </div>
-  </div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">February 3, 2026</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
+  <div class="ucd-rule ucd-rule--bottom" aria-hidden="true"></div>
 
 </header>
 
 
-<p>A simple weekly check: <strong>how many scheduled voters actually show up</strong> (events, canvass shifts, trainings).</p>
-<p>If the show rate drops, try: - confirm the day before - send a map + time estimate - offer a buddy option (bring a friend)</p>
+
+<link rel="stylesheet" href="../styles/styles.css">
+
+
+
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title">Understanding Precinct Level Data</h1>
+                  <div>
+        <div class="description">
+          A technical guide to the concepts and calculated columns in utah_county_elections.csv
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">precinct</div>
+                <div class="quarto-category">data</div>
+                <div class="quarto-category">elections</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 8, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+
+
+
+
+
+
+
+<div class="max-w-4xl mx-auto px-6 py-12">
+
+  <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 anchored">Domain Knowledge</h2>
+
+  <!-- ===================== DOMAIN CONCEPTS ===================== -->
+  <section class="mb-20">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-12">
+        <div class="grid md:grid-cols-2">
+
+          <!-- LEFT: text + hierarchy viz -->
+          <div class="p-8 flex flex-col justify-center gap-6">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 mb-2 anchored">The Precinct</h3>
+              <p class="text-slate-600 leading-relaxed mb-4">
+                The smallest political unit in the election. It is a specific geographic shape (polygon).
+                Everyone living inside this shape votes at the same location (or gets the same ballot style).
+              </p>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <div class="flex items-center justify-between mb-3">
+                <div class="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                  State (Utah)
+                </div>
+              </div>
+
+              <!-- nested boxes -->
+              <div class="relative rounded-lg border border-slate-200 bg-white p-3">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">County (Utah County)</div>
+
+
+                <div class="rounded-md border border-slate-200 bg-slate-50 p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Precinct</div>
+                  </div>
+
+                  <div class="rounded-md border border-brand-200 bg-brand-50 p-3">
+                    <div class="flex items-center justify-between mb-2">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-brand-700">Ballot Style</div>
+                    </div>
+                    
+                    <div class="rounded border border-slate-200 bg-white p-2">
+                      <div class="text-[10px] font-bold text-slate-500">Contest / Race</div>
+                      <div class="text-[10px] text-slate-400">appears on ballot</div>
+                    </div>
+                    
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="mt-3 text-[11px] text-slate-500">
+                Think of it as: <span class="font-mono text-slate-600">State → County → Precinct → Ballot Style → Contest</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: county + precinct grid -->
+          <div class="bg-slate-100 p-8 flex items-center justify-center pattern-grid relative">
+            <div class="w-56 h-56 border-2 border-slate-300 bg-white rounded-lg relative shadow-sm overflow-hidden">
+
+              <!-- County label: guaranteed visible -->
+              <div class="absolute top-2 left-2 z-30">
+                <span class="text-[10px] text-slate-600 font-bold uppercase bg-white/90 backdrop-blur px-2 py-1 rounded border border-slate-200">
+                  County
+                </span>
+              </div>
+
+              <!-- 3x3 grid -->
+              <div class="absolute inset-6 grid grid-cols-3 grid-rows-3 gap-1 z-10">
+                <!-- 1 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 2 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 3 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 4 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 5 (center highlighted) -->
+                <div class="bg-brand-100 border-2 border-brand-600 rounded-sm flex items-center justify-center shadow-lg z-20">
+                  <span class="text-[10px] font-extrabold text-brand-800 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 6 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 7 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 8 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+
+                <!-- 9 -->
+                <div class="bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors rounded-sm flex items-center justify-center">
+                  <span class="text-[10px] font-semibold text-slate-300 uppercase tracking-wide select-none">Precinct</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!-- reg vs turnout -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-12">
+      <div class="p-8 border-b border-slate-100">
+        <h3 class="text-xl font-bold text-slate-900 mb-2 anchored">Registration vs. Turnout</h3>
+        <p class="text-slate-600">Understanding the subset of people who actually generate data.</p>
+      </div>
+
+      <div class="p-8 bg-slate-50 grid md:grid-cols-3 gap-8 text-center">
+
+        <div class="relative">
+          <div class="h-32 flex items-end justify-center mb-3">
+            <div class="w-24 h-32 bg-slate-300 rounded-t-lg relative">
+              <div class="absolute bottom-2 w-full text-center text-xs font-mono text-slate-600">1,000</div>
+            </div>
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm anchored">voter_registration</h4>
+          <p class="text-xs text-slate-500 mt-1">People legally allowed to vote within the precinct.</p>
+        </div>
+
+        <div class="relative">
+          <div class="h-32 flex items-end justify-center mb-3">
+            <div class="w-24 h-20 bg-blue-500 rounded-t-lg relative">
+              <div class="absolute bottom-2 w-full text-center text-xs font-mono text-white">400</div>
+            </div>
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm anchored">voter_turnout</h4>
+          <p class="text-xs text-slate-500 mt-1">People who submitted a ballot within the precinct.</p>
+        </div>
+
+        <div class="relative">
+          <div class="h-32 flex items-end justify-center mb-3">
+            <div class="w-24 h-16 bg-indigo-600 rounded-t-lg relative">
+              <div class="absolute bottom-2 w-full text-center text-xs font-mono text-white">350</div>
+              <div class="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] text-red-500 font-bold whitespace-nowrap">
+                ↓ Drop-off (Rolloff)
+              </div>
+            </div>
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm anchored">contest_total_votes</h4>
+          <p class="text-xs text-slate-500 mt-1">People who voted in a <em>specific race</em> within the precinct.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Vote-for-N  -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-8 border-b border-slate-100">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2 anchored">Vote-for-N Contests</h3>
+            <p class="text-slate-600">
+              
+              While most races restrict voters to a single vote per candidate (<code class="font-mono">vote_for</code> = 1), some races like City Council races allow voters to vote for multiple candidates (<code class="font-mono">vote_for</code> &gt; 1).<br><br>
+              
+              When <code class="font-mono">vote_for</code> &gt; 1, <code class="font-mono">contest_total_votes</code> counts
+              <strong>selections</strong>, not ballots, <code class="font-mono">contest_total_votes</code> can exceed <code class="font-mono">precinct_ballots_cast</code>
+              and make <code class="font-mono">rolloff_rate</code> look negative.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-8 bg-slate-50">
+        <div class="bg-white border border-slate-200 rounded-xl p-6">
+
+
+          <!-- equation -->
+          <div class="text-center text-sm font-mono text-slate-600 mb-4">
+            max possible selections = <span class="font-mono">precinct_ballots_cast × vote_for</span>
+          </div>
+
+          <!-- illustrative numbers (keep or swap to your real example) -->
+          <div class="flex flex-wrap gap-2 text-[11px] text-slate-600 mb-3">
+            <span class="px-2 py-1 rounded border border-slate-200 bg-slate-50">
+              <span class="text-slate-400">precinct_ballots_cast</span> <span class="font-mono font-bold text-slate-800">400</span>
+            </span>
+            <span class="px-2 py-1 rounded border border-slate-200 bg-slate-50">
+              <span class="text-slate-400">vote_for</span> <span class="font-mono font-bold text-slate-800">2</span>
+            </span>
+            <span class="px-2 py-1 rounded border border-slate-200 bg-slate-50">
+              <span class="text-slate-400">contest_total_votes</span> <span class="font-mono font-bold text-slate-800">650</span>
+            </span>
+          </div>
+
+          <!-- capacity bar: scale is max selections (800); filled=650; unused=150 -->
+          <div class="flex justify-between text-[11px] text-slate-500 mb-2">
+            <span>Selections in this contest (scaled to max possible selections)</span>
+            <span class="font-mono">650 / 800</span>
+          </div>
+
+          <div class="h-5 rounded bg-slate-200 overflow-hidden flex">
+            <div class="h-full bg-brand-600" style="width:81.25%"></div>
+            <div class="h-full bg-slate-300" style="width:18.75%"></div>
+          </div>
+
+          <div class="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-[11px] text-slate-500">
+            <span class="inline-flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-sm bg-brand-600"></span>
+              Selections counted (<code class="font-mono">contest_total_votes</code>)
+            </span>
+            <span class="inline-flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-sm bg-slate-300"></span>
+              Unused selections (undervote)
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- ===================== CALCULATED COLUMNS ===================== -->
+  <section>
+
+    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 anchored">Data Dictionary</h2>
+
+
+    <div class="flex flex-col gap-6">
+
+      <!-- turnout_rate_precinct -->
+      <div class="math-card bg-white p-6 rounded-xl border border-slate-200">
+        <div class="mb-6">
+          <code class="text-lg font-bold text-brand-800 bg-brand-50 px-2 py-1 rounded">turnout_rate_precinct</code>
+          <p class="text-sm text-slate-500 mt-1">How engaged is this neighborhood?</p>
+        </div>
+
+        <div class="flex flex-col gap-3 text-sm font-mono bg-slate-50 p-4 rounded-lg border border-slate-100">
+          <div class="flex justify-center">
+            <div class="text-center">
+              <div class="border-b-2 border-slate-300 pb-1 mb-1 text-slate-700">voter_turnout</div>
+              <div class="text-slate-400">voter_registration</div>
+            </div>
+          </div>
+
+          <div class="text-center text-2xl text-slate-300 leading-none">=</div>
+
+          <div class="w-full bg-slate-200 rounded-full h-4 relative overflow-hidden">
+            <div class="bg-blue-500 h-full w-[45%]"></div>
+            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-slate-600">0.45</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- choice_share -->
+      <div class="math-card bg-white p-6 rounded-xl border border-slate-200">
+        <div class="mb-6">
+          <code class="text-lg font-bold text-brand-800 bg-brand-50 px-2 py-1 rounded">choice_share</code>
+          <p class="text-sm text-slate-500 mt-1">Percentage of the vote this candidate received.</p>
+        </div>
+
+        <!-- vertical -->
+        <div class="flex flex-col gap-3 text-sm font-mono bg-slate-50 p-4 rounded-lg border border-slate-100">
+          <div class="flex justify-center">
+            <div class="text-center">
+              <div class="border-b-2 border-slate-300 pb-1 mb-1 text-slate-700">precinct_votes</div>
+              <div class="text-slate-400">contest_total_votes</div>
+            </div>
+          </div>
+
+          <div class="text-center text-2xl text-slate-300 leading-none">=</div>
+
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-16 h-16 rounded-full border-4 border-slate-200 bg-white" style="background-image: conic-gradient(#1f7fe8 0% 60%, transparent 60% 100%)"></div>
+            <div class="text-xs text-slate-500 text-center">
+              Candidate gets the blue slice.<br>
+              Denominator is <strong>Sum of All Candidates</strong>.
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- margin_votes -->
+      <div class="math-card bg-white p-6 rounded-xl border border-slate-200">
+        <div class="mb-6">
+          <code class="text-lg font-bold text-brand-800 bg-brand-50 px-2 py-1 rounded">margin_votes</code>
+          <p class="text-sm text-slate-500 mt-1">The vote gap between the top two candidates (Winner − Runner-up).</p>
+        </div>
+
+        <!-- Visual: two candidate bars + explicit difference bracket -->
+        <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+
+          <!-- equation -->
+          <div class="text-center text-sm font-mono text-slate-600 mb-4">
+            winner_votes − runnerup_votes
+          </div>
+
+          <div class="text-center text-2xl text-slate-300 leading-none">=</div>
+
+          <!-- bars -->
+          <div class="space-y-3">
+            <!-- Winner bar -->
+            <div>
+              <div class="flex justify-between text-[11px] text-slate-500 mb-1">
+                <span>Winner</span><span class="font-mono">1,000</span>
+              </div>
+              <div class="h-4 rounded bg-slate-200 overflow-hidden">
+                <!-- scale winner to 100% -->
+                <div class="h-full w-full bg-indigo-600"></div>
+              </div>
+            </div>
+
+            <!-- Runner-up bar -->
+            <div>
+              <div class="flex justify-between text-[11px] text-slate-500 mb-1">
+                <span>Runner-up</span><span class="font-mono">800</span>
+              </div>
+              <div class="h-4 rounded bg-slate-200 overflow-hidden">
+                <!-- 800 / 1000 ≈ 80% -->
+                <div class="h-full w-[80%] bg-indigo-300"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- difference bracket / highlight -->
+          <div class="mt-4">
+            <div class="relative h-8">
+              <!-- bracket sits on top of the bar track; left edge starts at runner-up end, right edge at winner end -->
+              <div class="absolute left-[80%] right-0 top-1.5 h-0.5 bg-red-500"></div>
+              <div class="absolute left-[80%] top-0 h-4 w-0.5 bg-red-500"></div>
+              <div class="absolute right-0 top-0 h-4 w-0.5 bg-red-500"></div>
+              <div class="absolute left-[80%] right-0 top-3.5 flex justify-center">
+                <span class="text-[10px] font-bold text-red-600 bg-white/80 backdrop-blur px-2 py-1 rounded border border-red-100">
+                  margin_votes = 200
+                </span>
+              </div>
+            </div>
+
+            <p class="mt-2 text-[11px] text-slate-500">
+              The red span shows the <strong>extra votes</strong> the winner has beyond the runner-up.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- rolloff_rate -->
+      <div class="math-card bg-white p-6 rounded-xl border border-slate-200">
+        <div class="mb-6">
+          <code class="text-lg font-bold text-brand-800 bg-brand-50 px-2 py-1 rounded">rolloff_rate</code>
+          <p class="text-sm text-slate-500 mt-1">Voters who ignored this specific race.</p>
+        </div>
+
+        <!-- vertical -->
+        <div class="flex flex-col gap-3 text-sm font-mono bg-slate-50 p-4 rounded-lg border border-slate-100">
+          <div class="flex justify-center">
+            <div class="text-center flex flex-col justify-center">
+              <div class="border-b-2 border-slate-300 pb-1 mb-1 text-slate-700">( precinct_ballots_cast - contest_total_votes )</div>
+              <div class="text-slate-400">precinct_ballots_cast</div>
+            </div>
+          </div>
+
+          <div class="text-center text-2xl text-slate-300 leading-none">=</div>
+
+          <div class="w-full h-8 bg-slate-300 rounded overflow-hidden flex">
+            <div class="bg-blue-500 h-full w-[80%] flex items-center justify-center text-white text-[10px]">Voted</div>
+            <div class="bg-red-400 h-full w-[20%] flex items-center justify-center text-white text-[10px]">Blank</div>
+          </div>
+        </div>
+
+        <div class="mt-3 text-[11px] text-orange-700 bg-orange-50 p-2 rounded border border-orange-100">
+          <strong>⚠️ Negative Rolloff?</strong> In "Vote for 2" races, Total Votes &gt; Ballots Cast. Rolloff becomes negative. This is normal.
+        </div>
+      </div>
+
+      <!-- polarization_fragmentation -->
+      <div class="math-card bg-white p-6 rounded-xl border border-slate-200">
+        <div class="mb-6">
+          <code class="inline-flex w-fit items-center font-mono text-lg font-bold text-brand-800 bg-brand-50 px-2 py-1 rounded whitespace-nowrap leading-none">polarization_fragmentation</code>
+          <p class="text-sm text-slate-500 mt-1">Simpson Index: How split is the vote?</p>
+        </div>
+
+        <!-- Formula + viz block -->
+        <div class="text-sm font-mono bg-slate-50 p-4 rounded-lg border border-slate-100">
+
+          <div class="flex flex-col gap-4">
+            <!-- formula line -->
+            <div class="text-slate-700 text-center">
+              1 − Σ<span class="text-slate-500">(</span>
+              precinct_votes / contest_total_votes
+              <span class="text-slate-500">)</span><sup>2</sup>
+            </div>
+
+            <div class="text-center text-2xl text-slate-300 leading-none">=</div>
+
+            <!-- examples -->
+            <div class="flex flex-col gap-3">
+              <!-- Landslide row -->
+              <div class="flex items-center gap-4">
+                <div class="w-8 text-xs font-bold text-slate-400">0.1</div>
+                <div class="flex-1 h-6 bg-slate-200 rounded flex overflow-hidden">
+                  <div class="w-[90%] bg-indigo-600"></div>
+                  <div class="w-[10%] bg-indigo-200"></div>
+                </div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-wide">Landslide</div>
+              </div>
+
+              <!-- Fractured row -->
+              <div class="flex items-center gap-4">
+                <div class="w-8 text-xs font-bold text-slate-400">0.8</div>
+                <div class="flex-1 h-6 bg-slate-200 rounded flex overflow-hidden">
+                  <div class="w-[20%] bg-indigo-500 border-r border-white"></div>
+                  <div class="w-[20%] bg-indigo-400 border-r border-white"></div>
+                  <div class="w-[20%] bg-indigo-300 border-r border-white"></div>
+                  <div class="w-[20%] bg-indigo-200 border-r border-white"></div>
+                  <div class="w-[20%] bg-indigo-100"></div>
+                </div>
+                <div class="text-[10px] text-slate-500 uppercase tracking-wide">Fractured</div>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-slate-500 font-sans">
+              Higher values mean votes are spread across more choices; lower values mean one choice dominates.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<script>
+  lucide.createIcons();
+</script>
+
+
 
 
 
 </main> <!-- /main -->
+<script>
+
+  (function () {
+
+    // Mark active nav item based on current page path (and hash for in-page anchors)
+
+    const path = (window.location.pathname || "").toLowerCase();
+
+    const hash = (window.location.hash || "").toLowerCase();
+
+    const links = document.querySelectorAll(".ucd-navlink[data-nav]");
+
+
+
+    // Decide which nav key should be active
+
+    let activeKey = "";
+
+
+
+    const isBlog = path.endsWith("/blog.html") || path.endsWith("blog.html");
+
+    const isMaps = path.endsWith("/maps.html") || path.endsWith("maps.html");
+
+    const isAbout = path.endsWith("/about.html") || path.endsWith("about.html");
+
+    const isHome = path.endsWith("/index.html") || path.endsWith("index.html") || path.endsWith("/");
+
+
+
+    if (isBlog) {
+
+      activeKey = "blog";
+
+    } else if (isMaps) {
+
+      activeKey = "maps";
+
+    } else if (isAbout) {
+
+      activeKey = "about";
+
+    } else if (isHome) {
+
+      // Home page uses anchors for sections
+
+      if (hash === "#maps") activeKey = "maps";
+
+      else if (hash === "#about") activeKey = "about";
+
+      else activeKey = ""; // no underline on home by default
+
+    }
+
+
+
+    links.forEach((a) => {
+
+      const key = (a.getAttribute("data-nav") || "").toLowerCase();
+
+      if (key && key === activeKey) {
+
+        a.setAttribute("aria-current", "page");
+
+      } else {
+
+        a.removeAttribute("aria-current");
+
+      }
+
+    });
+
+  })();
+
+</script>
+
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -221,7 +916,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/ajaverett\.com");
+      var filterRegex = new RegExp("https:\/\/utcounty\.github\.io");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

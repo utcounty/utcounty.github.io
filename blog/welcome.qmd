@@ -1,12 +1,8 @@
 ---
-title: "Welcome: What This Blog Is For"
-date: 2026-02-04
-categories: [cloud, updates]
+title: "Structure of the Democratic Party in Utah"
+date: 2026-02-08
+categories: [party, data]
 image: images/DONKEYYYY.jpg
 ---
 
-This is a lightweight place to share **Utah County–specific** political data and practical strategy.
-
-- Keep posts short
-- Link sources when you can
-- End with one clear takeaway
+![Elephant](images/ut_dem_org.svg)
